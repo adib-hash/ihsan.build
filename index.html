@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ihsan | Community for Muslim Builders</title>
+    <meta name="description" content="A community for Muslim builders working on startups, nonprofits, and civic engagement.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;600&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom Font Assignments */
+        .font-heading { font-family: 'Cinzel', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-accent { font-family: 'Amiri', serif; }
+
+        /* Smooth Reveal Animation Classes using Intersection Observer */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered delays for children in the scroll animation */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Islamic Geometric Pattern Background (CSS generated for subtle dark texture) */
+        .pattern-bg {
+            background-color: #030712; /* gray-950 */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+                linear-gradient(30deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+                linear-gradient(150deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+                linear-gradient(30deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+                linear-gradient(150deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+                linear-gradient(60deg, rgba(255, 255, 255, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(255, 255, 255, 0.03) 75%, rgba(255, 255, 255, 0.03)),
+                linear-gradient(60deg, rgba(255, 255, 255, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(255, 255, 255, 0.03) 75%, rgba(255, 255, 255, 0.03));
+            background-size: 80px 140px;
+            background-position: 0 0, 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+        }
+
+        /* Glassmorphism utilities for cards and sections */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Scrollbar - Dark theme friendly */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1d4ed8; 
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-slate-200 font-body overflow-x-hidden selection:bg-blue-900 selection:text-blue-100">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-6" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 group">
+                <!-- Ihsan Logo Placeholder -->
+                <span class="text-xl font-heading text-blue-400">ihsan</span>
+            </a>
+            <div class="hidden md:flex gap-8 text-sm uppercase tracking-widest text-slate-400 font-light">
+                <a href="#mission" class="hover:text-blue-400 transition-colors">Mission</a>
+                <a href="#pillars" class="hover:text-blue-400 transition-colors">Pillars</a>
+                <a href="#community" class="hover:text-blue-400 transition-colors">Community</a>
+            </div>
+            <a href="#join" class="hidden md:block px-6 py-2 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors text-sm uppercase tracking-widest rounded-sm">
+                Join Us
+            </a>
+            <!-- Mobile Menu Icon -->
+            <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i data-lucide="menu"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-gray-950 border-b border-slate-800 p-6 flex flex-col gap-4 md:hidden text-center glass">
+            <a href="#mission" class="hover:text-blue-400 transition-colors">Mission</a>
+            <a href="#pillars" class="hover:text-blue-400 transition-colors">Pillars</a>
+            <a href="#community" class="hover:text-blue-400 transition-colors">Community</a>
+            <a href="#join" class="px-6 py-2 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors text-sm uppercase tracking-widest rounded-sm">
+                Join Us
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden pattern-bg">
+        <!-- Abstract Glow for visual depth -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+            <div class="reveal">
+                <span class="inline-block py-1 px-3 border border-blue-500/30 rounded-full text-blue-400 text-xs tracking-[0.2em] uppercase mb-6 font-semibold bg-blue-950/30 backdrop-blur-sm">
+                    Est. 2025
+                </span>
+            </div>
+            <h1 class="reveal delay-100 text-5xl md:text-7xl lg:text-8xl font-heading text-white mb-6 leading-tight">
+                Build for <br />
+                <span class="font-accent italic font-light text-slate-400">Excellence</span>
+            </h1>
+            <p class="reveal delay-200 text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                A collective of Muslim builders pursuing <span class="text-blue-400 font-accent italic">ihsan</span> in every endeavor.
+            </p>
+            <div class="reveal delay-300 flex flex-col md:flex-row gap-4 justify-center items-center">
+                <a href="#join" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold rounded-sm shadow-[0_0_20px_-5px_rgba(59,130,246,0.5)]">
+                    Sign up to stay updated
+                </a>
+                <a href="#mission" class="px-8 py-3 text-slate-400 hover:text-white flex items-center gap-2 transition-colors uppercase tracking-widest text-xs font-bold group">
+                    Explore
+                    <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Decorative geometric element -->
+        <div class="absolute bottom-10 left-10 hidden md:block opacity-20">
+            <svg width="100" height="100" viewBox="0 0 100 100" class="animate-[spin_10s_linear_infinite]">
+                <rect x="25" y="25" width="50" height="50" stroke="currentColor" fill="none" class="text-white"/>
+                <rect x="25" y="25" width="50" height="50" stroke="currentColor" fill="none" class="text-white rotate-45 origin-center"/>
+            </svg>
+        </div>
+    </header>
+
+    <!-- Mission / Definition Section -->
+    <section id="mission" class="py-24 bg-gray-950 relative border-t border-slate-900">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-sm text-blue-500 uppercase tracking-widest mb-4 font-bold">The Philosophy</h2>
+                    <h3 class="text-3xl md:text-4xl font-heading text-white mb-6">Doing what is beautiful.</h3>
+                    <p class="text-slate-400 leading-relaxed mb-6">
+                        ihsan (Arabic: إحسان) translates to "perfection" or "excellence." It is a matter of taking one's inner faith and showing it in both deed and action, a sense of social responsibility borne from religious convictions.
+                    </p>
+                    <p class="text-slate-400 leading-relaxed">
+                        We believe the next generation of great institutions will be built by those who couple excellence in output with excellence in character.
+                    </p>
+                </div>
+                <div class="reveal delay-200 relative">
+                    <!-- Subtle card glow -->
+                    <div class="absolute -inset-4 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-20 blur-2xl rounded-lg"></div>
+                    <div class="relative glass p-8 rounded-lg border border-slate-800">
+                        <blockquote class="font-heading text-xl md:text-2xl text-slate-200 italic leading-normal mb-6">
+                            "God has prescribed Ihsan (proficiency and excellence) in all things."
+                        </blockquote>
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-[1px] bg-blue-500"></div>
+                            <span class="text-xs uppercase tracking-widest text-slate-500">Prophetic Tradition</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillars Section -->
+    <section id="pillars" class="py-24 bg-gray-900 relative">
+        <!-- Subtle Pattern Overlay -->
+        <div class="absolute inset-0 pattern-bg opacity-50 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-sm text-blue-500 uppercase tracking-widest mb-4 font-bold">Our Pillars</h2>
+                <h3 class="text-3xl md:text-4xl font-heading text-white">Builders of the Future</h3>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1: Startups -->
+                <div class="group reveal delay-100">
+                    <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i data-lucide="rocket" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="zap"></i>
+                        </div>
+                        <h4 class="text-xl font-heading text-white mb-3">Startups</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            Founders building businesses big and small. From launching a coffee shop to an AI startup, we support those creating value and solving hard problems.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 hover:text-blue-400">
+                            Venture Track <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Nonprofits -->
+                <div class="group reveal delay-200">
+                    <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i data-lucide="heart-handshake" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="sprout"></i>
+                        </div>
+                        <h4 class="text-xl font-heading text-white mb-3">Nonprofits</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            Leaders maximizing every dollar of our charitable giving, at home and abroad. We focus on long-term sustainability and operational excellence.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 hover:text-blue-400">
+                            Impact Track <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3: Civic Engagement -->
+                <div class="group reveal delay-300">
+                    <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i data-lucide="landmark" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+                            <i data-lucide="scale"></i>
+                        </div>
+                        <h4 class="text-xl font-heading text-white mb-3">Civic Engagement</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            Voices shaping policy and election outcomes. Bridging the gap between community needs and systemic change through advocacy.
+                        </p>
+                        <a href="#" class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 hover:text-blue-400">
+                            Policy Track <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats / Community Section -->
+    <section id="community" class="py-24 bg-gray-950 border-t border-slate-900">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="reveal">
+                    <h3 class="text-3xl font-heading text-white mb-6">A high-trust network.</h3>
+                    <p class="text-slate-400 mb-6">
+                        We aren't just a Slack group. We are a brotherhood and sisterhood of high-agency individuals who help each other build and launch ventures aligned with our values.
+                    </p>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+                            <span class="text-slate-300">Community Events & Expert Panels</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+                            <span class="text-slate-300">World-Class Talent Network"</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+                            <span class="text-slate-300">Aligned Capital & Mentorship</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid grid-cols-2 gap-4 reveal delay-200">
+                    <!-- Stat Cards -->
+                    <div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl md:text-4xl font-bold text-white mb-2">150+</span>
+                        <span class="text-xs uppercase tracking-widest text-slate-500">Founders</span>
+                    </div>
+                    <div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl md:text-4xl font-bold text-white mb-2">$50M+</span>
+                        <span class="text-xs uppercase tracking-widest text-slate-500">Value Created</span>
+                    </div>
+                    <div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center col-span-2">
+                        <span class="text-3xl md:text-4xl font-bold text-white mb-2">Global</span>
+                        <span class="text-xs uppercase tracking-widest text-slate-500">Network Presence</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / CTA -->
+    <footer id="join" class="bg-gray-950 pt-24 pb-12 relative overflow-hidden border-t border-slate-900">
+        <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-900 to-transparent"></div>
+        
+        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+            <div class="reveal">
+                <!-- Ihsan Logo Placeholder (Icon-based) -->
+                <div class="h-16 w-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-blue-600 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                    <i data-lucide="gem" class="w-8 h-8 text-white"></i>
+                </div>
+                
+                <h2 class="text-3xl md:text-5xl font-heading text-white mb-6">Ready to build with Ihsan?</h2>
+                <p class="text-slate-400 mb-10 max-w-xl mx-auto">
+                    Sign up to stay up-to-date on our community.
+                </p>
+                
+                <form class="max-w-md mx-auto mb-16 flex flex-col sm:flex-row gap-2" onsubmit="event.preventDefault(); alert('Thank you for your interest! We will be in touch shortly.');">
+                    <input type="email" placeholder="enter your email" class="flex-1 bg-slate-900 border border-slate-700 text-white px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors rounded-sm" required>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 uppercase tracking-widest text-xs font-bold transition-colors rounded-sm shadow-lg shadow-blue-500/20">
+                        Apply
+                    </button>
+                </form>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-slate-900 text-slate-600 text-sm">
+                <div class="mb-4 md:mb-0">
+                    &copy; 2025 ihsan.build. All rights reserved.
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Navbar Scroll Effect: Adds a background and shadow when scrolling down
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-gray-950/90', 'backdrop-blur-md', 'shadow-lg');
+                navbar.classList.remove('py-6');
+                navbar.classList.add('py-4');
+            } else {
+                navbar.classList.remove('bg-gray-950/90', 'backdrop-blur-md', 'shadow-lg');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-6');
+            }
+        });
+
+        // Intersection Observer for Scroll Animations (revealing elements)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop observing once revealed
+                }
+            });
+        }, observerOptions);
+
+        // Apply observer to all elements with the 'reveal' class
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
