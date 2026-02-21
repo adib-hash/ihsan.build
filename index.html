@@ -74,7 +74,6 @@
 </head>
 <body class="bg-gray-950 text-slate-200 font-body overflow-x-hidden selection:bg-blue-900 selection:text-blue-100">
 
-    <!-- Navigation -->
     <nav class="fixed w-full z-50 transition-all duration-300 py-6" id="navbar">
         <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
             <a href="#" class="flex items-center gap-2 group">
@@ -84,21 +83,21 @@
                 <a href="#mission" class="hover:text-blue-400 transition-colors">Mission</a>
                 <a href="#pillars" class="hover:text-blue-400 transition-colors">Pillars</a>
                 <a href="#community" class="hover:text-blue-400 transition-colors">Community</a>
+                <a href="#apps" class="hover:text-blue-400 transition-colors">Apps</a>
                 <a href="blog.html" class="hover:text-blue-400 transition-colors">Blog</a>
             </div>
             <a href="#join" class="hidden md:block px-6 py-2 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors text-sm uppercase tracking-widest rounded-sm">
                 Join Us
             </a>
-            <!-- Mobile Menu Icon -->
             <button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
                 <i data-lucide="menu"></i>
             </button>
         </div>
-        <!-- Mobile Menu Dropdown -->
         <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-gray-950 border-b border-slate-800 p-6 flex flex-col gap-4 md:hidden text-center glass">
             <a href="#mission" class="hover:text-blue-400 transition-colors">Mission</a>
             <a href="#pillars" class="hover:text-blue-400 transition-colors">Pillars</a>
             <a href="#community" class="hover:text-blue-400 transition-colors">Community</a>
+            <a href="#apps" class="hover:text-blue-400 transition-colors">Apps</a>
             <a href="blog.html" class="hover:text-blue-400 transition-colors">Blog</a>
             <a href="#join" class="px-6 py-2 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors text-sm uppercase tracking-widest rounded-sm">
                 Join Us
@@ -106,9 +105,7 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <header class="relative min-h-screen flex items-center justify-center overflow-hidden pattern-bg">
-        <!-- Abstract Glow for visual depth -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
@@ -135,7 +132,6 @@
             </div>
         </div>
         
-        <!-- Decorative geometric element -->
         <div class="absolute bottom-10 left-10 hidden md:block opacity-20">
             <svg width="100" height="100" viewBox="0 0 100 100" class="animate-[spin_10s_linear_infinite]">
                 <rect x="25" y="25" width="50" height="50" stroke="currentColor" fill="none" class="text-white"/>
@@ -144,7 +140,6 @@
         </div>
     </header>
 
-    <!-- Mission / Definition Section -->
     <section id="mission" class="py-24 bg-gray-950 relative border-t border-slate-900">
         <div class="max-w-5xl mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -159,7 +154,6 @@
                     </p>
                 </div>
                 <div class="reveal delay-200 relative">
-                    <!-- Subtle card glow -->
                     <div class="absolute -inset-4 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-20 blur-2xl rounded-lg"></div>
                     <div class="relative glass p-8 rounded-lg border border-slate-800">
                         <blockquote class="font-heading text-xl md:text-2xl text-slate-200 italic leading-normal mb-6">
@@ -175,9 +169,7 @@
         </div>
     </section>
 
-    <!-- Pillars Section -->
     <section id="pillars" class="py-24 bg-gray-900 relative">
-        <!-- Subtle Pattern Overlay -->
         <div class="absolute inset-0 pattern-bg opacity-50 pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-6 relative z-10">
@@ -187,7 +179,6 @@
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- Card 1: Startups -->
                 <div class="group reveal delay-100">
                     <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -206,7 +197,6 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Nonprofits -->
                 <div class="group reveal delay-200">
                     <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -225,7 +215,6 @@
                     </div>
                 </div>
 
-                <!-- Card 3: Civic Engagement -->
                 <div class="group reveal delay-300">
                     <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -247,7 +236,6 @@
         </div>
     </section>
 
-    <!-- Stats / Community Section -->
     <section id="community" class="py-24 bg-gray-950 border-t border-slate-900">
         <div class="max-w-6xl mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-12">
@@ -263,7 +251,7 @@
                         </li>
                         <li class="flex items-start gap-3">
                             <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
-                            <span class="text-slate-300">World-Class Talent Network"</span>
+                            <span class="text-slate-300">World-Class Talent Network</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
@@ -272,7 +260,6 @@
                     </ul>
                 </div>
                 <div class="grid grid-cols-2 gap-4 reveal delay-200">
-                    <!-- Stat Cards -->
                     <div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center">
                         <span class="text-3xl md:text-4xl font-bold text-white mb-2">150+</span>
                         <span class="text-xs uppercase tracking-widest text-slate-500">Founders</span>
@@ -290,9 +277,48 @@
         </div>
     </section>
 
-    <!-- Blog Preview Section -->
-    <section id="blog" class="py-24 bg-gray-900 relative border-t border-slate-900">
+    <section id="apps" class="py-24 bg-gray-900 relative border-t border-slate-900">
         <div class="absolute inset-0 pattern-bg opacity-30 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-sm text-blue-500 uppercase tracking-widest mb-4 font-bold">Our Tools</h2>
+                <h3 class="text-3xl md:text-4xl font-heading text-white">Community Apps</h3>
+                <p class="text-slate-400 mt-4 max-w-2xl mx-auto">Software and tools built by and for the ihsan network to drive operational excellence.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="https://your-app-url-goes-here.com" target="_blank" class="group reveal delay-100 block">
+                    <div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <i data-lucide="layout-grid" class="w-24 h-24 text-white"></i>
+                        </div>
+                        <div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                            <i data-lucide="app-window"></i>
+                        </div>
+                        <h4 class="text-xl font-heading text-white mb-3">Your App Name</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                            A brief description of your web app. Explain what problem it solves for the community here.
+                        </p>
+                        <span class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 group-hover:text-blue-400 transition-colors">
+                            Launch App <i data-lucide="external-link" class="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                        </span>
+                    </div>
+                </a>
+                
+                <div class="group reveal delay-200 block opacity-50">
+                    <div class="glass p-8 h-full rounded-sm border-t border-transparent relative overflow-hidden border border-dashed border-slate-700 flex flex-col items-center justify-center text-center min-h-[300px]">
+                        <div class="w-12 h-12 flex items-center justify-center bg-slate-800/50 rounded-full mb-4 text-slate-500">
+                            <i data-lucide="plus"></i>
+                        </div>
+                        <h4 class="text-lg font-heading text-slate-400 mb-2">More Apps Coming</h4>
+                        <p class="text-slate-500 text-sm">Building in progress...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="blog" class="py-24 bg-gray-950 relative border-t border-slate-900">
         <div class="max-w-5xl mx-auto px-6 relative z-10">
             <div class="flex justify-between items-end mb-12 reveal">
                 <div>
@@ -304,8 +330,7 @@
                 </a>
             </div>
             <div id="blog-preview" class="grid md:grid-cols-2 gap-6 reveal delay-200">
-                <!-- Populated by JS -->
-            </div>
+                </div>
             <div class="mt-8 text-center md:hidden reveal delay-300">
                 <a href="blog.html" class="inline-flex items-center gap-2 text-sm text-blue-500 hover:text-blue-400 uppercase tracking-widest transition-colors">
                     View All Posts <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -314,13 +339,11 @@
         </div>
     </section>
 
-    <!-- Footer / CTA -->
     <footer id="join" class="bg-gray-950 pt-24 pb-12 relative overflow-hidden border-t border-slate-900">
         <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-900 to-transparent"></div>
         
         <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
             <div class="reveal">
-                <!-- Ihsan Logo Placeholder (Icon-based) -->
                 <div class="h-16 w-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-blue-600 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
                     <i data-lucide="gem" class="w-8 h-8 text-white"></i>
                 </div>
@@ -330,7 +353,6 @@
                     Sign up to stay up-to-date on our community.
                 </p>
                 
-                <!-- START: Formspree Configuration -->
                 <form 
                     action="https://formspree.io/f/xzzqqjjb" 
                     method="POST"
@@ -347,8 +369,7 @@
                         SIGNUP
                     </button>
                 </form>
-                <!-- END: Formspree Configuration -->
-            </div>
+                </div>
 
             <div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-slate-900 text-slate-600 text-sm">
                 <div class="mb-4 md:mb-0">
@@ -363,7 +384,6 @@
         </div>
     </footer>
 
-    <!-- Load posts data for blog preview -->
     <script src="posts.js"></script>
 
     <script>
