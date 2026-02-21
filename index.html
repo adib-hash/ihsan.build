@@ -1,244 +1,442 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ihsan | Community for Muslim Builders</title>
-    <meta name="description" content="A community for Muslim builders working on startups, nonprofits, and civic engagement.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ihsan | Community for Muslim Builders</title>
+<meta name="description" content="A community for Muslim builders working on startups, nonprofits, and civic engagement.">
+<script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;600&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+
 <style>
-/* Custom styles */
-.font-display { font-family: 'Cormorant Garamond', serif; }
-.font-body { font-family: 'DM Sans', sans-serif; }
+/* Custom Font Assignments */
+.font-heading { font-family: 'Cinzel', serif; }
+.font-body { font-family: 'Inter', sans-serif; }
 .font-accent { font-family: 'Amiri', serif; }
 
-.reveal { opacity: 0; transform: translateY(24px); transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
-.reveal.active { opacity: 1; transform: translateY(0); }
-.delay-1 { transition-delay: 120ms; }
-.delay-2 { transition-delay: 240ms; }
-.delay-3 { transition-delay: 360ms; }
-.delay-4 { transition-delay: 480ms; }
-
-.pattern-warm {
-    background-image:
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30Z' fill='none' stroke='%23D4AD5C' stroke-width='0.3' opacity='0.06'/%3E%3Cpath d='M30 10L50 30L30 50L10 30Z' fill='none' stroke='%23D4AD5C' stroke-width='0.3' opacity='0.04'/%3E%3C/svg%3E");
-    background-size: 60px 60px;
+/* Smooth Reveal Animation Classes using Intersection Observer */
+.reveal {
+opacity: 0;
+transform: translateY(30px);
+transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.active {
+opacity: 1;
+transform: translateY(0);
 }
 
-.ornament-rule { display: flex; align-items: center; gap: 16px; }
-.ornament-rule::before, .ornament-rule::after {
-    content: ''; flex: 1; height: 1px;
-    background: linear-gradient(to right, transparent, #D4AD5C33, transparent);
+/* Staggered delays for children in the scroll animation */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+
+/* Islamic Geometric Pattern Background (CSS generated for subtle dark texture) */
+.pattern-bg {
+background-color: #030712; /* gray-950 */
+background-image: 
+radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+linear-gradient(30deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+linear-gradient(150deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+linear-gradient(30deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+linear-gradient(150deg, #030712 12%, transparent 12.5%, transparent 87%, #030712 87.5%, #030712),
+linear-gradient(60deg, rgba(255, 255, 255, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(255, 255, 255, 0.03) 75%, rgba(255, 255, 255, 0.03)),
+linear-gradient(60deg, rgba(255, 255, 255, 0.03) 25%, transparent 25.5%, transparent 75%, rgba(255, 255, 255, 0.03) 75%, rgba(255, 255, 255, 0.03));
+background-size: 80px 140px;
+background-position: 0 0, 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0C0B09; }
-::-webkit-scrollbar-thumb { background: #D4AD5C; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #B8923A; }
-::selection { background: #D4AD5C44; color: #FAF9F6; }
-body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-
-.gold-underline { position: relative; }
-.gold-underline::after {
-    content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px;
-    background: #D4AD5C; transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+/* Glassmorphism utilities for cards and sections */
+.glass {
+background: rgba(255, 255, 255, 0.03);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.05);
 }
-.gold-underline:hover::after { width: 100%; }
 
-@keyframes gentle-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.spin-slow { animation: gentle-spin 30s linear infinite; }
-
-/* Tailwind compiled utilities */
-*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.\!container{width:100%!important}.container{width:100%}@media (min-width:640px){.\!container{max-width:640px!important}.container{max-width:640px}}@media (min-width:768px){.\!container{max-width:768px!important}.container{max-width:768px}}@media (min-width:1024px){.\!container{max-width:1024px!important}.container{max-width:1024px}}@media (min-width:1280px){.\!container{max-width:1280px!important}.container{max-width:1280px}}@media (min-width:1536px){.\!container{max-width:1536px!important}.container{max-width:1536px}}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.-inset-3{inset:-.75rem}.inset-0{inset:0}.bottom-0{bottom:0}.left-0{left:0}.left-1/2{left:50%}.right-0{right:0}.right-12{right:3rem}.right-8{right:2rem}.top-1/2{top:50%}.top-1/3{top:33.333333%}.top-20{top:5rem}.top-8{top:2rem}.top-full{top:100%}.-z-10{z-index:-10}.z-10{z-index:10}.z-50{z-index:50}.col-span-2{grid-column:span 2/span 2}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-10{margin-bottom:2.5rem}.mb-12{margin-bottom:3rem}.mb-14{margin-bottom:3.5rem}.mb-20{margin-bottom:5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-4{margin-left:1rem}.mt-0\.5{margin-top:.125rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-1\.5{height:.375rem}.h-10{height:2.5rem}.h-16{height:4rem}.h-3\.5{height:.875rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-8{height:2rem}.h-\[400px\]{height:400px}.h-\[500px\]{height:500px}.h-px{height:1px}.min-h-screen{min-height:100vh}.w-1\.5{width:.375rem}.w-10{width:2.5rem}.w-16{width:4rem}.w-3\.5{width:.875rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-8{width:2rem}.w-\[400px\]{width:400px}.w-\[600px\]{width:600px}.w-\[700px\]{width:700px}.w-full{width:100%}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-5xl{max-width:64rem}.max-w-6xl{max-width:72rem}.max-w-\[180px\]{max-width:180px}.max-w-\[200px\]{max-width:200px}.max-w-md{max-width:28rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.-translate-x-1/2{--tw-translate-x:-50%}.-translate-x-1/2,.-translate-y-1/2{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1/2{--tw-translate-y:-50%}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-10{gap:2.5rem}.gap-12{gap:3rem}.gap-16{gap:4rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.gap-px{gap:1px}.space-y-5>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.25rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.25rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-hidden{overflow-x:hidden}.scroll-smooth{scroll-behavior:smooth}.rounded-full{border-radius:9999px}.rounded-sm{border-radius:.125rem}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-base-600{--tw-border-opacity:1;border-color:rgb(61 59 53/var(--tw-border-opacity,1))}.border-base-700{--tw-border-opacity:1;border-color:rgb(46 45 40/var(--tw-border-opacity,1))}.border-base-700/50{border-color:rgba(46,45,40,.5)}.border-base-800{--tw-border-opacity:1;border-color:rgb(33 32 28/var(--tw-border-opacity,1))}.border-base-800/50{border-color:rgba(33,32,28,.5)}.border-gold-500{--tw-border-opacity:1;border-color:rgb(184 146 58/var(--tw-border-opacity,1))}.border-gold-500/40{border-color:rgba(184,146,58,.4)}.border-gold-600{--tw-border-opacity:1;border-color:rgb(150 117 46/var(--tw-border-opacity,1))}.border-gold-600/40{border-color:rgba(150,117,46,.4)}.bg-base-700{--tw-bg-opacity:1;background-color:rgb(46 45 40/var(--tw-bg-opacity,1))}.bg-base-800{--tw-bg-opacity:1;background-color:rgb(33 32 28/var(--tw-bg-opacity,1))}.bg-base-900{--tw-bg-opacity:1;background-color:rgb(20 19 16/var(--tw-bg-opacity,1))}.bg-base-950{--tw-bg-opacity:1;background-color:rgb(12 11 9/var(--tw-bg-opacity,1))}.bg-base-950/95{background-color:rgba(12,11,9,.95)}.bg-gold-500{--tw-bg-opacity:1;background-color:rgb(184 146 58/var(--tw-bg-opacity,1))}.bg-gold-600{--tw-bg-opacity:1;background-color:rgb(150 117 46/var(--tw-bg-opacity,1))}.bg-gold-700{--tw-bg-opacity:1;background-color:rgb(113 88 39/var(--tw-bg-opacity,1))}.bg-gold-700/15{background-color:rgba(113,88,39,.15)}.bg-gold-800{--tw-bg-opacity:1;background-color:rgb(94 73 36/var(--tw-bg-opacity,1))}.bg-gold-800/10{background-color:rgba(94,73,36,.1)}.bg-gold-900{--tw-bg-opacity:1;background-color:rgb(79 61 34/var(--tw-bg-opacity,1))}.bg-gold-900/20{background-color:rgba(79,61,34,.2)}.bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}.from-transparent{--tw-gradient-from:transparent var(--tw-gradient-from-position);--tw-gradient-to:transparent var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}.via-base-700{--tw-gradient-to:rgba(46,45,40,0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from),#2e2d28 var(--tw-gradient-via-position),var(--tw-gradient-to)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.p-10{padding:2.5rem}.p-8{padding:2rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-28{padding-top:7rem;padding-bottom:7rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-3\.5{padding-top:.875rem;padding-bottom:.875rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-\[12px\]{font-size:12px}.text-\[13px\]{font-size:13px}.text-\[15px\]{font-size:15px}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-light{font-weight:300}.font-medium{font-weight:500}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.italic{font-style:italic}.not-italic{font-style:normal}.leading-\[1\.15\]{line-height:1.15}.leading-\[1\.1\]{line-height:1.1}.leading-\[1\.85\]{line-height:1.85}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.tracking-\[0\.15em\]{letter-spacing:.15em}.tracking-\[0\.18em\]{letter-spacing:.18em}.tracking-\[0\.25em\]{letter-spacing:.25em}.tracking-\[0\.2em\]{letter-spacing:.2em}.tracking-wide{letter-spacing:.025em}.tracking-widest{letter-spacing:.1em}.text-base-700{--tw-text-opacity:1;color:rgb(46 45 40/var(--tw-text-opacity,1))}.text-base-950{--tw-text-opacity:1;color:rgb(12 11 9/var(--tw-text-opacity,1))}.text-gold-400{--tw-text-opacity:1;color:rgb(212 173 92/var(--tw-text-opacity,1))}.text-gold-500{--tw-text-opacity:1;color:rgb(184 146 58/var(--tw-text-opacity,1))}.text-gold-600{--tw-text-opacity:1;color:rgb(150 117 46/var(--tw-text-opacity,1))}.text-warm-100{--tw-text-opacity:1;color:rgb(243 240 234/var(--tw-text-opacity,1))}.text-warm-200{--tw-text-opacity:1;color:rgb(232 226 214/var(--tw-text-opacity,1))}.text-warm-300{--tw-text-opacity:1;color:rgb(196 189 173/var(--tw-text-opacity,1))}.text-warm-400{--tw-text-opacity:1;color:rgb(158 151 133/var(--tw-text-opacity,1))}.text-warm-50{--tw-text-opacity:1;color:rgb(250 249 246/var(--tw-text-opacity,1))}.text-warm-500{--tw-text-opacity:1;color:rgb(122 116 102/var(--tw-text-opacity,1))}.text-warm-600{--tw-text-opacity:1;color:rgb(92 87 76/var(--tw-text-opacity,1))}.opacity-40{opacity:.4}.opacity-50{opacity:.5}.opacity-\[0\.04\]{opacity:.04}.shadow-lg{--tw-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color),0 4px 6px -4px var(--tw-shadow-color)}.shadow-lg,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color),0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-gold-500{--tw-shadow-color:#b8923a;--tw-shadow:var(--tw-shadow-colored)}.shadow-gold-500/15{--tw-shadow-color:rgba(184,146,58,.15);--tw-shadow:var(--tw-shadow-colored)}.blur-\[120px\]{--tw-blur:blur(120px)}.blur-\[120px\],.blur-\[150px\]{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[150px\]{--tw-blur:blur(150px)}.blur-\[160px\]{--tw-blur:blur(160px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-lg{--tw-backdrop-blur:blur(16px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-300{transition-duration:.3s}.duration-500{transition-duration:.5s}.placeholder\:text-warm-600::-moz-placeholder{--tw-text-opacity:1;color:rgb(92 87 76/var(--tw-text-opacity,1))}.placeholder\:text-warm-600::placeholder{--tw-text-opacity:1;color:rgb(92 87 76/var(--tw-text-opacity,1))}.hover\:bg-base-850:hover{--tw-bg-opacity:1;background-color:rgb(26 25 22/var(--tw-bg-opacity,1))}.hover\:bg-gold-500:hover{--tw-bg-opacity:1;background-color:rgb(184 146 58/var(--tw-bg-opacity,1))}.hover\:bg-gold-600:hover{--tw-bg-opacity:1;background-color:rgb(150 117 46/var(--tw-bg-opacity,1))}.hover\:text-base-950:hover{--tw-text-opacity:1;color:rgb(12 11 9/var(--tw-text-opacity,1))}.hover\:text-gold-400:hover{--tw-text-opacity:1;color:rgb(212 173 92/var(--tw-text-opacity,1))}.focus\:border-gold-500:focus{--tw-border-opacity:1;border-color:rgb(184 146 58/var(--tw-border-opacity,1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.group:hover .group-hover\:translate-y-0\.5{--tw-translate-y:0.125rem;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:border-gold-500{--tw-border-opacity:1;border-color:rgb(184 146 58/var(--tw-border-opacity,1))}.group:hover .group-hover\:bg-gold-500{--tw-bg-opacity:1;background-color:rgb(184 146 58/var(--tw-bg-opacity,1))}.group:hover .group-hover\:tracking-\[0\.3em\]{letter-spacing:.3em}.group:hover .group-hover\:text-base-600{--tw-text-opacity:1;color:rgb(61 59 53/var(--tw-text-opacity,1))}.group:hover .group-hover\:text-base-950{--tw-text-opacity:1;color:rgb(12 11 9/var(--tw-text-opacity,1))}.group:hover .group-hover\:text-gold-400{--tw-text-opacity:1;color:rgb(212 173 92/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:flex-row{flex-direction:row}.sm\:text-6xl{font-size:3.75rem;line-height:1}}@media (min-width:768px){.md\:col-span-5{grid-column:span 5/span 5}.md\:col-span-7{grid-column:span 7/span 7}.md\:mb-0{margin-bottom:0}.md\:flex{display:flex}.md\:inline-flex{display:inline-flex}.md\:hidden{display:none}.md\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:gap-16{gap:4rem}.md\:p-12{padding:3rem}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-5xl{font-size:3rem;line-height:1}.md\:text-7xl{font-size:4.5rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width:1024px){.lg\:block{display:block}.lg\:text-6xl{font-size:3.75rem;line-height:1}.lg\:text-\[5\.5rem\]{font-size:5.5rem}}</style>
+/* Custom Scrollbar - Dark theme friendly */
+::-webkit-scrollbar {
+width: 8px;
+}
+::-webkit-scrollbar-track {
+background: #030712; 
+}
+::-webkit-scrollbar-thumb {
+background: #1e3a8a; 
+border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+background: #1d4ed8; 
+}
+</style>
 </head>
-<body class="bg-base-950 text-warm-300 font-body overflow-x-hidden">
-    <nav class="fixed w-full z-50 transition-all duration-500 py-5" id="navbar">
-        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="font-display text-2xl font-medium tracking-wide text-warm-50">ihsan</a>
-            <div class="hidden md:flex items-center gap-10">
-                <a href="#philosophy" class="text-[13px] tracking-[0.15em] uppercase text-warm-500 hover:text-gold-400 gold-underline transition-colors">Philosophy</a>
-                <a href="#pillars" class="text-[13px] tracking-[0.15em] uppercase text-warm-500 hover:text-gold-400 gold-underline transition-colors">Pillars</a>
-                <a href="#network" class="text-[13px] tracking-[0.15em] uppercase text-warm-500 hover:text-gold-400 gold-underline transition-colors">Network</a>
-                <a href="blog.html" class="text-[13px] tracking-[0.15em] uppercase text-warm-500 hover:text-gold-400 gold-underline transition-colors">Blog</a>
-                <a href="#join" class="ml-4 px-5 py-2 border border-gold-500/40 text-gold-400 hover:bg-gold-500 hover:text-base-950 text-[12px] tracking-[0.18em] uppercase transition-all duration-300">Join Us</a>
-            </div>
-            <button class="md:hidden text-warm-200" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-base-900/95 backdrop-blur-lg border-b border-base-700 p-8 flex flex-col gap-5 md:hidden text-center">
-            <a href="#philosophy" class="text-sm tracking-widest uppercase text-warm-400 hover:text-gold-400">Philosophy</a>
-            <a href="#pillars" class="text-sm tracking-widest uppercase text-warm-400 hover:text-gold-400">Pillars</a>
-            <a href="#network" class="text-sm tracking-widest uppercase text-warm-400 hover:text-gold-400">Network</a>
-            <a href="blog.html" class="text-sm tracking-widest uppercase text-warm-400 hover:text-gold-400">Blog</a>
-            <a href="#join" class="mt-2 px-5 py-2.5 border border-gold-500/40 text-gold-400 text-sm tracking-widest uppercase">Join Us</a>
-        </div>
-    </nav>
-    <header class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gold-700/15 rounded-full blur-[160px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gold-800/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute top-20 right-12 hidden lg:block opacity-[0.04] spin-slow">
-            <svg width="200" height="200" viewBox="0 0 200 200"><polygon points="100,5 195,100 100,195 5,100" fill="none" stroke="#FAF9F6" stroke-width="1"/><polygon points="100,30 170,100 100,170 30,100" fill="none" stroke="#FAF9F6" stroke-width="0.75"/><polygon points="100,55 145,100 100,145 55,100" fill="none" stroke="#FAF9F6" stroke-width="0.5"/><circle cx="100" cy="100" r="75" fill="none" stroke="#FAF9F6" stroke-width="0.5"/></svg>
-        </div>
-        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-            <div class="reveal"><div class="ornament-rule max-w-[200px] mx-auto mb-8"><span class="text-gold-400 text-lg font-accent">إحسان</span></div></div>
-            <h1 class="reveal delay-1 font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-warm-50 leading-[1.1] mb-8 font-light">Build for<br><em class="font-accent text-gold-400 font-normal not-italic" style="font-style: italic;">Excellence</em></h1>
-            <p class="reveal delay-2 text-lg md:text-xl text-warm-400 max-w-xl mx-auto mb-12 font-light leading-relaxed">A collective of Muslim builders pursuing <em class="font-accent text-gold-400 not-italic" style="font-style: italic;">ihsan</em> — beauty and excellence — in every endeavor.</p>
-            <div class="reveal delay-3 flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a href="#join" class="px-8 py-3.5 bg-gold-500 hover:bg-gold-600 text-base-950 text-[12px] tracking-[0.2em] uppercase font-medium transition-all duration-300 shadow-xl shadow-gold-500/15">Stay Updated</a>
-                <a href="#philosophy" class="group px-6 py-3.5 text-warm-400 hover:text-gold-400 flex items-center gap-2 text-[12px] tracking-[0.2em] uppercase font-medium transition-colors"><span>Learn More</span><svg class="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></a>
-            </div>
-        </div>
-        <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-base-700 to-transparent"></div>
-    </header>
-    <section id="philosophy" class="py-28 relative">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="grid md:grid-cols-12 gap-12 md:gap-16 items-start">
-                <div class="md:col-span-7 reveal">
-                    <span class="text-[11px] tracking-[0.25em] uppercase text-gold-500 font-medium mb-6 block">The Philosophy</span>
-                    <h2 class="font-display text-4xl md:text-5xl text-warm-50 font-light leading-[1.15] mb-8">Doing what is<br>beautiful.</h2>
-                    <p class="text-warm-400 leading-[1.85] mb-6 text-[15px]"><em class="font-accent text-warm-200" style="font-style: italic;">Ihsan</em> (Arabic: إحسان) translates to "perfection" or "excellence." It is a matter of taking one's inner faith and showing it in both deed and action — a sense of social responsibility borne from religious convictions.</p>
-                    <p class="text-warm-400 leading-[1.85] text-[15px]">We believe the next generation of great institutions will be built by those who couple excellence in output with excellence in character.</p>
-                </div>
-                <div class="md:col-span-5 reveal delay-2">
-                    <div class="relative mt-4">
-                        <div class="absolute -inset-3 bg-gold-900/20 rounded-sm -z-10"></div>
-                        <div class="bg-base-800 border border-base-700 p-10 rounded-sm">
-                            <svg class="w-8 h-8 text-gold-600 mb-6" viewBox="0 0 24 24" fill="currentColor"><path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.69 11 13.217 11 15c0 1.105-.448 2.105-1.172 2.828A3.998 3.998 0 017 19a4.01 4.01 0 01-2.417-1.679zM14.583 17.321C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C19.591 11.69 21 13.217 21 15c0 1.105-.448 2.105-1.172 2.828A3.998 3.998 0 0117 19a4.01 4.01 0 01-2.417-1.679z"/></svg>
-                            <blockquote class="font-display text-xl md:text-2xl text-warm-100 leading-snug mb-8 font-normal" style="font-style: italic;">God has prescribed Ihsan — proficiency and excellence — in all things.</blockquote>
-                            <div class="flex items-center gap-3"><div class="w-8 h-px bg-gold-500"></div><span class="text-[11px] tracking-[0.2em] uppercase text-warm-500 font-medium">Prophetic Tradition</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="pillars" class="py-28 bg-base-900 relative overflow-hidden">
-        <div class="absolute inset-0 pattern-warm pointer-events-none"></div>
-        <div class="max-w-6xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-20 reveal">
-                <span class="text-[11px] tracking-[0.25em] uppercase text-gold-500 font-medium mb-5 block">Our Pillars</span>
-                <h2 class="font-display text-4xl md:text-5xl text-warm-50 font-light">Builders of the Future</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-px bg-base-700/50 border border-base-700/50 reveal delay-1">
-                <div class="bg-base-900 p-10 md:p-12 group hover:bg-base-850 transition-colors duration-500 relative">
-                    <div class="absolute top-8 right-8 text-base-700 group-hover:text-base-600 transition-colors"><svg class="w-16 h-16 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></div>
-                    <div class="w-10 h-10 rounded-full border border-gold-600/40 flex items-center justify-center mb-8 group-hover:bg-gold-500 group-hover:border-gold-500 transition-all duration-500"><svg class="w-4 h-4 text-gold-500 group-hover:text-base-950 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
-                    <h3 class="font-display text-2xl text-warm-50 mb-4 font-medium">Startups</h3>
-                    <p class="text-warm-400 text-sm leading-relaxed mb-8">Founders building businesses big and small. From a coffee shop to an AI startup, we support those creating value and solving hard problems.</p>
-                    <span class="text-[11px] tracking-[0.2em] uppercase text-gold-500 font-medium group-hover:tracking-[0.3em] transition-all">Venture Track →</span>
-                </div>
-                <div class="bg-base-900 p-10 md:p-12 group hover:bg-base-850 transition-colors duration-500 relative">
-                    <div class="absolute top-8 right-8 text-base-700 group-hover:text-base-600 transition-colors"><svg class="w-16 h-16 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66"/><path d="m18 15-2-2"/><path d="m15 18-2-2"/></svg></div>
-                    <div class="w-10 h-10 rounded-full border border-gold-600/40 flex items-center justify-center mb-8 group-hover:bg-gold-500 group-hover:border-gold-500 transition-all duration-500"><svg class="w-4 h-4 text-gold-500 group-hover:text-base-950 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></div>
-                    <h3 class="font-display text-2xl text-warm-50 mb-4 font-medium">Nonprofits</h3>
-                    <p class="text-warm-400 text-sm leading-relaxed mb-8">Leaders maximizing every dollar of charitable giving, at home and abroad. We focus on long-term sustainability and operational excellence.</p>
-                    <span class="text-[11px] tracking-[0.2em] uppercase text-gold-500 font-medium group-hover:tracking-[0.3em] transition-all">Impact Track →</span>
-                </div>
-                <div class="bg-base-900 p-10 md:p-12 group hover:bg-base-850 transition-colors duration-500 relative">
-                    <div class="absolute top-8 right-8 text-base-700 group-hover:text-base-600 transition-colors"><svg class="w-16 h-16 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></div>
-                    <div class="w-10 h-10 rounded-full border border-gold-600/40 flex items-center justify-center mb-8 group-hover:bg-gold-500 group-hover:border-gold-500 transition-all duration-500"><svg class="w-4 h-4 text-gold-500 group-hover:text-base-950 transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div>
-                    <h3 class="font-display text-2xl text-warm-50 mb-4 font-medium">Civic Engagement</h3>
-                    <p class="text-warm-400 text-sm leading-relaxed mb-8">Voices shaping policy and election outcomes. Bridging the gap between community needs and systemic change through advocacy.</p>
-                    <span class="text-[11px] tracking-[0.2em] uppercase text-gold-500 font-medium group-hover:tracking-[0.3em] transition-all">Policy Track →</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="network" class="py-28 relative">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="grid md:grid-cols-12 gap-16 items-center">
-                <div class="md:col-span-5 reveal">
-                    <div class="grid grid-cols-2 gap-px bg-base-700/50">
-                        <div class="bg-base-900 p-8 text-center"><span class="font-display text-4xl md:text-5xl text-warm-50 font-light block mb-1">150<span class="text-gold-400">+</span></span><span class="text-[10px] tracking-[0.25em] uppercase text-warm-500 font-medium">Founders</span></div>
-                        <div class="bg-base-900 p-8 text-center"><span class="font-display text-4xl md:text-5xl text-warm-50 font-light block mb-1">$50M<span class="text-gold-400">+</span></span><span class="text-[10px] tracking-[0.25em] uppercase text-warm-500 font-medium">Value Created</span></div>
-                        <div class="bg-base-900 p-8 text-center col-span-2 border-t border-base-700/50"><span class="font-display text-4xl md:text-5xl text-warm-50 font-light block mb-1">Global</span><span class="text-[10px] tracking-[0.25em] uppercase text-warm-500 font-medium">Network Presence</span></div>
-                    </div>
-                </div>
-                <div class="md:col-span-7 reveal delay-2">
-                    <span class="text-[11px] tracking-[0.25em] uppercase text-gold-500 font-medium mb-6 block">The Network</span>
-                    <h2 class="font-display text-4xl md:text-5xl text-warm-50 font-light leading-[1.15] mb-8">A high-trust<br>brotherhood.</h2>
-                    <p class="text-warm-400 leading-[1.85] text-[15px] mb-8">We aren't just a Slack group. We are a brotherhood and sisterhood of high-agency individuals who help each other build and launch ventures aligned with our values.</p>
-                    <div class="space-y-5">
-                        <div class="flex items-start gap-4"><div class="w-5 h-5 rounded-full border border-gold-600/40 flex items-center justify-center mt-0.5 flex-shrink-0"><div class="w-1.5 h-1.5 rounded-full bg-gold-500"></div></div><span class="text-warm-200 text-[15px]">Community Events & Expert Panels</span></div>
-                        <div class="flex items-start gap-4"><div class="w-5 h-5 rounded-full border border-gold-600/40 flex items-center justify-center mt-0.5 flex-shrink-0"><div class="w-1.5 h-1.5 rounded-full bg-gold-500"></div></div><span class="text-warm-200 text-[15px]">World-Class Talent Network</span></div>
-                        <div class="flex items-start gap-4"><div class="w-5 h-5 rounded-full border border-gold-600/40 flex items-center justify-center mt-0.5 flex-shrink-0"><div class="w-1.5 h-1.5 rounded-full bg-gold-500"></div></div><span class="text-warm-200 text-[15px]">Aligned Capital & Mentorship</span></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="blog" class="py-28 bg-base-900 relative border-t border-base-700/50">
-        <div class="absolute inset-0 pattern-warm pointer-events-none opacity-50"></div>
+<body class="bg-gray-950 text-slate-200 font-body overflow-x-hidden selection:bg-blue-900 selection:text-blue-100">
+
+<!-- Navigation -->
+<nav class="fixed w-full z-50 transition-all duration-300 py-6" id="navbar">
+<div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+<a href="#" class="flex items-center gap-2 group">
+                <!-- Ihsan Logo Placeholder -->
+<span class="text-xl font-heading text-blue-400">ihsan</span>
+</a>
+<div class="hidden md:flex gap-8 text-sm uppercase tracking-widest text-slate-400 font-light">
+<a href="#mission" class="hover:text-blue-400 transition-colors">Mission</a>
+<a href="#pillars" class="hover:text-blue-400 transition-colors">Pillars</a>
+<a href="#community" class="hover:text-blue-400 transition-colors">Community</a>
+                <a href="blog.html" class="hover:text-blue-400 transition-colors">Blog</a>
+</div>
+<a href="#join" class="hidden md:block px-6 py-2 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors text-sm uppercase tracking-widest rounded-sm">
+Join Us
+</a>
+<!-- Mobile Menu Icon -->
+<button class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+<i data-lucide="menu"></i>
+</button>
+</div>
+<!-- Mobile Menu Dropdown -->
+<div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-gray-950 border-b border-slate-800 p-6 flex flex-col gap-4 md:hidden text-center glass">
+<a href="#mission" class="hover:text-blue-400 transition-colors">Mission</a>
+<a href="#pillars" class="hover:text-blue-400 transition-colors">Pillars</a>
+<a href="#community" class="hover:text-blue-400 transition-colors">Community</a>
+            <a href="blog.html" class="hover:text-blue-400 transition-colors">Blog</a>
+<a href="#join" class="px-6 py-2 border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 transition-colors text-sm uppercase tracking-widest rounded-sm">
+Join Us
+</a>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<header class="relative min-h-screen flex items-center justify-center overflow-hidden pattern-bg">
+<!-- Abstract Glow for visual depth -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+<div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+<div class="reveal">
+<span class="inline-block py-1 px-3 border border-blue-500/30 rounded-full text-blue-400 text-xs tracking-[0.2em] uppercase mb-6 font-semibold bg-blue-950/30 backdrop-blur-sm">
+Est. 2025
+</span>
+</div>
+<h1 class="reveal delay-100 text-5xl md:text-7xl lg:text-8xl font-heading text-white mb-6 leading-tight">
+Build for <br />
+<span class="font-accent italic font-light text-slate-400">Excellence</span>
+</h1>
+<p class="reveal delay-200 text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+A collective of Muslim builders pursuing <span class="text-blue-400 font-accent italic">ihsan</span> in every endeavor.
+</p>
+<div class="reveal delay-300 flex flex-col md:flex-row gap-4 justify-center items-center">
+<a href="#join" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 uppercase tracking-widest text-xs font-bold rounded-sm shadow-[0_0_20px_-5px_rgba(59,130,246,0.5)]">
+Sign up to stay updated
+</a>
+<a href="#mission" class="px-8 py-3 text-slate-400 hover:text-white flex items-center gap-2 transition-colors uppercase tracking-widest text-xs font-bold group">
+Explore
+<i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i>
+</a>
+</div>
+</div>
+
+<!-- Decorative geometric element -->
+<div class="absolute bottom-10 left-10 hidden md:block opacity-20">
+<svg width="100" height="100" viewBox="0 0 100 100" class="animate-[spin_10s_linear_infinite]">
+<rect x="25" y="25" width="50" height="50" stroke="currentColor" fill="none" class="text-white"/>
+<rect x="25" y="25" width="50" height="50" stroke="currentColor" fill="none" class="text-white rotate-45 origin-center"/>
+</svg>
+</div>
+</header>
+
+<!-- Mission / Definition Section -->
+<section id="mission" class="py-24 bg-gray-950 relative border-t border-slate-900">
+<div class="max-w-5xl mx-auto px-6">
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div class="reveal">
+<h2 class="text-sm text-blue-500 uppercase tracking-widest mb-4 font-bold">The Philosophy</h2>
+<h3 class="text-3xl md:text-4xl font-heading text-white mb-6">Doing what is beautiful.</h3>
+<p class="text-slate-400 leading-relaxed mb-6">
+ihsan (Arabic: إحسان) translates to "perfection" or "excellence." It is a matter of taking one's inner faith and showing it in both deed and action, a sense of social responsibility borne from religious convictions.
+</p>
+<p class="text-slate-400 leading-relaxed">
+We believe the next generation of great institutions will be built by those who couple excellence in output with excellence in character.
+</p>
+</div>
+<div class="reveal delay-200 relative">
+<!-- Subtle card glow -->
+<div class="absolute -inset-4 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-20 blur-2xl rounded-lg"></div>
+<div class="relative glass p-8 rounded-lg border border-slate-800">
+<blockquote class="font-heading text-xl md:text-2xl text-slate-200 italic leading-normal mb-6">
+"God has prescribed Ihsan (proficiency and excellence) in all things."
+</blockquote>
+<div class="flex items-center gap-4">
+<div class="w-10 h-[1px] bg-blue-500"></div>
+<span class="text-xs uppercase tracking-widest text-slate-500">Prophetic Tradition</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Pillars Section -->
+<section id="pillars" class="py-24 bg-gray-900 relative">
+<!-- Subtle Pattern Overlay -->
+<div class="absolute inset-0 pattern-bg opacity-50 pointer-events-none"></div>
+
+<div class="max-w-7xl mx-auto px-6 relative z-10">
+<div class="text-center mb-20 reveal">
+<h2 class="text-sm text-blue-500 uppercase tracking-widest mb-4 font-bold">Our Pillars</h2>
+<h3 class="text-3xl md:text-4xl font-heading text-white">Builders of the Future</h3>
+</div>
+
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Card 1: Startups -->
+<div class="group reveal delay-100">
+<div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<i data-lucide="rocket" class="w-24 h-24 text-white"></i>
+</div>
+<div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+<i data-lucide="zap"></i>
+</div>
+<h4 class="text-xl font-heading text-white mb-3">Startups</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">
+Founders building businesses big and small. From launching a coffee shop to an AI startup, we support those creating value and solving hard problems.
+</p>
+<a href="#" class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 hover:text-blue-400">
+Venture Track <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
+</a>
+</div>
+</div>
+
+<!-- Card 2: Nonprofits -->
+<div class="group reveal delay-200">
+<div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<i data-lucide="heart-handshake" class="w-24 h-24 text-white"></i>
+</div>
+<div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+<i data-lucide="sprout"></i>
+</div>
+<h4 class="text-xl font-heading text-white mb-3">Nonprofits</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">
+Leaders maximizing every dollar of our charitable giving, at home and abroad. We focus on long-term sustainability and operational excellence.
+</p>
+<a href="#" class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 hover:text-blue-400">
+Impact Track <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
+</a>
+</div>
+</div>
+
+<!-- Card 3: Civic Engagement -->
+<div class="group reveal delay-300">
+<div class="glass p-8 h-full rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<i data-lucide="landmark" class="w-24 h-24 text-white"></i>
+</div>
+<div class="w-12 h-12 flex items-center justify-center bg-slate-800 rounded-full mb-6 text-blue-400 group-hover:scale-110 transition-transform duration-300">
+<i data-lucide="scale"></i>
+</div>
+<h4 class="text-xl font-heading text-white mb-3">Civic Engagement</h4>
+<p class="text-slate-400 text-sm leading-relaxed mb-6">
+Voices shaping policy and election outcomes. Bridging the gap between community needs and systemic change through advocacy.
+</p>
+<a href="#" class="inline-flex items-center text-xs uppercase tracking-widest text-blue-500 hover:text-blue-400">
+Policy Track <i data-lucide="arrow-right" class="w-3 h-3 ml-2"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Stats / Community Section -->
+<section id="community" class="py-24 bg-gray-950 border-t border-slate-900">
+<div class="max-w-6xl mx-auto px-6">
+<div class="grid md:grid-cols-2 gap-12">
+<div class="reveal">
+<h3 class="text-3xl font-heading text-white mb-6">A high-trust network.</h3>
+<p class="text-slate-400 mb-6">
+We aren't just a Slack group. We are a brotherhood and sisterhood of high-agency individuals who help each other build and launch ventures aligned with our values.
+</p>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+<span class="text-slate-300">Community Events & Expert Panels</span>
+</li>
+<li class="flex items-start gap-3">
+<i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+<span class="text-slate-300">World-Class Talent Network"</span>
+</li>
+<li class="flex items-start gap-3">
+<i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500 mt-0.5"></i>
+<span class="text-slate-300">Aligned Capital & Mentorship</span>
+</li>
+</ul>
+</div>
+<div class="grid grid-cols-2 gap-4 reveal delay-200">
+<!-- Stat Cards -->
+<div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center">
+<span class="text-3xl md:text-4xl font-bold text-white mb-2">150+</span>
+<span class="text-xs uppercase tracking-widest text-slate-500">Founders</span>
+</div>
+<div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center">
+<span class="text-3xl md:text-4xl font-bold text-white mb-2">$50M+</span>
+<span class="text-xs uppercase tracking-widest text-slate-500">Value Created</span>
+</div>
+<div class="bg-slate-900 p-6 rounded border border-slate-800 flex flex-col items-center justify-center text-center col-span-2">
+<span class="text-3xl md:text-4xl font-bold text-white mb-2">Global</span>
+<span class="text-xs uppercase tracking-widest text-slate-500">Network Presence</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+    <!-- Blog Preview Section -->
+    <section id="blog" class="py-24 bg-gray-900 relative border-t border-slate-900">
+        <div class="absolute inset-0 pattern-bg opacity-30 pointer-events-none"></div>
         <div class="max-w-5xl mx-auto px-6 relative z-10">
-            <div class="flex justify-between items-end mb-14 reveal">
+            <div class="flex justify-between items-end mb-12 reveal">
                 <div>
-                    <span class="text-[11px] tracking-[0.25em] uppercase text-gold-500 font-medium mb-5 block">From the Blog</span>
-                    <h2 class="font-display text-4xl md:text-5xl text-warm-50 font-light">Latest Thinking</h2>
+                    <h2 class="text-sm text-blue-500 uppercase tracking-widest mb-4 font-bold">From the Blog</h2>
+                    <h3 class="text-3xl md:text-4xl font-heading text-white">Latest Thinking</h3>
                 </div>
-                <a href="blog.html" class="hidden md:inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-gold-500 hover:text-gold-400 font-medium transition-colors">View All <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+                <a href="blog.html" class="hidden md:inline-flex items-center gap-2 text-sm text-blue-500 hover:text-blue-400 uppercase tracking-widest transition-colors">
+                    View All <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
             </div>
-            <div id="blog-preview" class="grid md:grid-cols-2 gap-px bg-base-700/50 reveal delay-2"></div>
-            <div class="mt-10 text-center md:hidden reveal delay-3">
-                <a href="blog.html" class="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-gold-500 hover:text-gold-400 font-medium transition-colors">View All Posts <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+            <div id="blog-preview" class="grid md:grid-cols-2 gap-6 reveal delay-200">
+                <!-- Populated by JS -->
+            </div>
+            <div class="mt-8 text-center md:hidden reveal delay-300">
+                <a href="blog.html" class="inline-flex items-center gap-2 text-sm text-blue-500 hover:text-blue-400 uppercase tracking-widest transition-colors">
+                    View All Posts <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
             </div>
         </div>
     </section>
-    <section id="join" class="py-28 bg-base-800 relative overflow-hidden border-t border-base-700/50">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gold-600/8 rounded-full blur-[150px] pointer-events-none"></div>
-        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
-            <div class="reveal">
-                <div class="ornament-rule max-w-[180px] mx-auto mb-10">
-                    <svg class="w-5 h-5 text-gold-400" viewBox="0 0 20 20"><polygon points="10,0 20,10 10,20 0,10" fill="none" stroke="currentColor" stroke-width="1"/><polygon points="10,4 16,10 10,16 4,10" fill="none" stroke="currentColor" stroke-width="0.5"/></svg>
-                </div>
-                <h2 class="font-display text-4xl md:text-5xl lg:text-6xl text-warm-50 font-light leading-[1.1] mb-6">Ready to build with<br><em class="font-accent text-gold-400" style="font-style: italic;">Ihsan</em>?</h2>
-                <p class="text-warm-500 mb-12 max-w-md mx-auto text-[15px] leading-relaxed">Sign up to stay up-to-date on our community.</p>
-                <form action="https://formspree.io/f/xzzqqjjb" method="POST" class="max-w-md mx-auto flex flex-col sm:flex-row gap-2">
-                    <input type="email" name="email" placeholder="enter your email" class="flex-1 bg-base-900 border border-base-600 text-warm-100 px-5 py-3.5 focus:outline-none focus:border-gold-500 transition-colors placeholder:text-warm-600 text-sm" required>
-                    <button type="submit" class="bg-gold-500 hover:bg-gold-600 text-base-950 px-8 py-3.5 text-[12px] tracking-[0.2em] uppercase font-medium transition-colors shadow-lg shadow-gold-500/15">Sign Up</button>
-                </form>
-            </div>
-        </div>
-    </section>
-    <footer class="bg-base-950 py-12 border-t border-base-800">
-        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-warm-600 text-sm">
-            <div class="mb-4 md:mb-0 font-display text-warm-500 tracking-wide">&copy; 2025 ihsan.build</div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-gold-400 transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg></a>
-                <a href="#" class="hover:text-gold-400 transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></a>
-                <a href="#" class="hover:text-gold-400 transition-colors"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></a>
-            </div>
-        </div>
-    </footer>
+
+<!-- Footer / CTA -->
+<footer id="join" class="bg-gray-950 pt-24 pb-12 relative overflow-hidden border-t border-slate-900">
+<div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-900 to-transparent"></div>
+
+<div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+<div class="reveal">
+<!-- Ihsan Logo Placeholder (Icon-based) -->
+<div class="h-16 w-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-blue-600 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+<i data-lucide="gem" class="w-8 h-8 text-white"></i>
+</div>
+
+<h2 class="text-3xl md:text-5xl font-heading text-white mb-6">Ready to build with Ihsan?</h2>
+<p class="text-slate-400 mb-10 max-w-xl mx-auto">
+Sign up to stay up-to-date on our community.
+</p>
+
+<!-- START: Formspree Configuration -->
+<form 
+action="https://formspree.io/f/xzzqqjjb" 
+method="POST"
+class="max-w-md mx-auto mb-16 flex flex-col sm:flex-row gap-2"
+>
+                    <!-- IMPORTANT: The 'name' attribute is what Formspree uses to label the data -->
+<input 
+type="email" 
+name="email"
+placeholder="enter your email" 
+class="flex-1 bg-slate-900 border border-slate-700 text-white px-4 py-3 focus:outline-none focus:border-blue-500 transition-colors rounded-sm" 
+required
+>
+<button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 uppercase tracking-widest text-xs font-bold transition-colors rounded-sm shadow-lg shadow-blue-500/20">
+SIGNUP
+</button>
+</form>
+<!-- END: Formspree Configuration -->
+</div>
+
+<div class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-slate-900 text-slate-600 text-sm">
+<div class="mb-4 md:mb-0">
+&copy; 2025 ihsan.build. All rights reserved.
+</div>
+<div class="flex gap-6">
+<a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+<a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+<a href="#" class="hover:text-blue-400 transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+</div>
+</div>
+</div>
+</footer>
+
+    <!-- Load posts data for blog preview -->
     <script src="posts.js"></script>
-    <script>
+
+<script>
+// Initialize Lucide Icons
+lucide.createIcons();
+
+        // Navbar Scroll Effect: Adds a background and shadow when scrolling down
+        // Navbar Scroll Effect
 const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-base-950/95', 'backdrop-blur-lg', 'shadow-sm', 'border-b', 'border-base-800/50');
-                navbar.classList.remove('py-5'); navbar.classList.add('py-3');
-            } else {
-                navbar.classList.remove('bg-base-950/95', 'backdrop-blur-lg', 'shadow-sm', 'border-b', 'border-base-800/50');
-                navbar.classList.remove('py-3'); navbar.classList.add('py-5');
-            }
-        });
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); } });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+window.addEventListener('scroll', () => {
+if (window.scrollY > 50) {
+navbar.classList.add('bg-gray-950/90', 'backdrop-blur-md', 'shadow-lg');
+navbar.classList.remove('py-6');
+navbar.classList.add('py-4');
+} else {
+navbar.classList.remove('bg-gray-950/90', 'backdrop-blur-md', 'shadow-lg');
+navbar.classList.remove('py-4');
+navbar.classList.add('py-6');
+}
+});
+
+        // Intersection Observer for Scroll Animations (revealing elements)
+        // Intersection Observer for Scroll Animations
+const observerOptions = {
+root: null,
+rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+            threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop observing once revealed
+                    observer.unobserve(entry.target);
+}
+});
+}, observerOptions);
+
+        // Apply observer to all elements with the 'reveal' class
+document.querySelectorAll('.reveal').forEach(el => {
+observer.observe(el);
+});
+
+        // Blog Preview — show latest 2 posts on homepage
         function renderBlogPreview() {
             const container = document.getElementById('blog-preview');
             if (!container || !window.POSTS || POSTS.length === 0) return;
-            container.innerHTML = POSTS.slice(0, 2).map((post, i) => {
+
+            const latest = POSTS.slice(0, 2);
+            container.innerHTML = latest.map((post, i) => {
                 const preview = post.body.split('\n')[0].substring(0, 140) + '…';
                 const d = new Date(post.date + 'T00:00:00');
-                const dateStr = d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
-                return '<a href="blog.html#post-'+i+'" class="group bg-base-900 hover:bg-base-850 p-10 transition-colors duration-500 block"><time class="text-[10px] tracking-[0.25em] uppercase text-warm-500 font-medium">'+dateStr+'</time><h4 class="font-display text-xl text-warm-50 mt-3 mb-3 font-medium group-hover:text-gold-400 transition-colors">'+post.title+'</h4><p class="text-warm-400 text-sm leading-relaxed">'+preview+'</p><span class="inline-flex items-center gap-1 text-[11px] text-gold-500 mt-5 uppercase tracking-[0.2em] font-medium group-hover:tracking-[0.3em] transition-all">Read <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span></a>';
+                const dateStr = d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                return `
+                    <a href="blog.html#post-${i}" class="group glass p-8 rounded-sm hover:bg-slate-800/50 transition-all duration-500 border-t border-transparent hover:border-blue-500/50">
+                        <time class="text-xs text-slate-500 uppercase tracking-widest">${dateStr}</time>
+                        <h4 class="text-xl font-heading text-white mt-3 mb-3 group-hover:text-blue-400 transition-colors">${post.title}</h4>
+                        <p class="text-slate-400 text-sm leading-relaxed">${preview}</p>
+                        <span class="inline-flex items-center gap-1 text-xs text-blue-500 mt-4 uppercase tracking-widest">
+                            Read More <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                        </span>
+                    </a>
+                `;
             }).join('');
+
+            lucide.createIcons();
         }
+
         renderBlogPreview();
-    </script>
+</script>
 </body>
 </html>
