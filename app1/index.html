@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Quran Phrases">
+<meta name="apple-mobile-web-app-title" content="100Q">
 <meta name="theme-color" content="#0C1B0E">
-<title>Qur'anic Phrases — Flashcards</title>
+<title>100Q — Qur'anic Phrases</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  :root { --font-scale: 1; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body, #root { height: 100%; overflow: hidden; }
   body { background: #0C1B0E; }
@@ -26,396 +27,1079 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  /* Header */
-  .header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px 20px 12px;
-    border-bottom: 1px solid rgba(212,168,84,0.12);
-    flex-shrink: 0;
-  }
-  .header-title {
-    font-size: 15px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(212,168,84,0.7); font-weight: 400;
-  }
-  .header-btn {
-    background: none; border: 1px solid rgba(212,168,84,0.25);
-    color: rgba(212,168,84,0.7); font-family: inherit;
-    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 6px 12px; border-radius: 3px; cursor: pointer;
-    transition: all 0.2s;
-  }
-  .header-btn:hover { border-color: rgba(212,168,84,0.6); color: rgba(212,168,84,1); }
-  .header-btn.active { background: rgba(212,168,84,0.15); border-color: rgba(212,168,84,0.5); color: #D4A854; }
-  .badge {
-    display: inline-block; background: #D4A854; color: #0C1B0E;
-    font-size: 10px; font-weight: 700; border-radius: 10px;
-    padding: 1px 6px; margin-left: 5px; vertical-align: middle;
-  }
-
-  /* Progress */
-  .progress-wrap { padding: 10px 20px 6px; flex-shrink: 0; }
-  .progress-track {
-    height: 2px; background: rgba(212,168,84,0.1); border-radius: 1px; overflow: hidden;
-  }
-  .progress-fill {
-    height: 100%; background: linear-gradient(90deg, rgba(212,168,84,0.4), rgba(212,168,84,0.8));
-    border-radius: 1px; transition: width 0.4s ease;
-  }
-  .progress-label {
-    text-align: center; margin-top: 6px;
-    font-size: 11px; color: rgba(212,168,84,0.3); letter-spacing: 0.2em;
-  }
-
-  /* Card area */
-  .card-area {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: 12px 20px; overflow: hidden;
-  }
-  .card-wrapper { perspective: 1200px; width: 100%; max-width: 420px; }
+  .card-wrapper { perspective: 1200px; width: 100%; max-width: 420px; margin: 0 auto; }
   .card-inner {
-    position: relative; width: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
-    cursor: pointer;
+    position: relative; width: 100%; min-height: 340px;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d; cursor: pointer;
   }
   .card-inner.flipped { transform: rotateY(180deg); }
-
   .card-face {
-    width: 100%;
+    position: absolute; inset: 0;
     backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    background: linear-gradient(145deg, #1C2F1E 0%, #162518 50%, #1A2C1C 100%);
-    border: 1px solid rgba(212,168,84,0.18);
-    border-radius: 12px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 260px; padding: 32px 28px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    border-radius: 20px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 32px 24px; overflow: hidden;
   }
-  .card-face::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(212,168,84,0.04) 0%, transparent 60%);
-    pointer-events: none;
+  .card-front {
+    background: linear-gradient(145deg, #1C2E1E 0%, #162516 50%, #1A2A1B 100%);
+    border: 1px solid rgba(212, 168, 84, 0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,168,84,0.08);
   }
   .card-back {
-    position: absolute; top: 0; left: 0;
+    background: linear-gradient(145deg, #2A1F10 0%, #1F1708 50%, #2A1F10 100%);
+    border: 1px solid rgba(212, 168, 84, 0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(212,168,84,0.12);
     transform: rotateY(180deg);
   }
 
-  .card-hint {
-    position: absolute; bottom: 12px; left: 0; right: 0;
-    text-align: center; font-size: 11px; letter-spacing: 0.15em;
-    color: rgba(212,168,84,0.25); text-transform: uppercase;
-  }
-  .card-label {
-    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
-    color: rgba(212,168,84,0.35); margin-bottom: 20px;
-  }
+  .ornament { position: absolute; width: 60px; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,168,84,0.4), transparent); }
+  .ornament-top { top: 20px; } .ornament-bottom { bottom: 20px; }
+  .ornament-dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: rgba(212,168,84,0.3); left: 50%; transform: translateX(-50%); }
+  .ornament-dot-top { top: 12px; } .ornament-dot-bottom { bottom: 12px; }
+
   .arabic-text {
-    font-family: 'Amiri', serif; font-size: 32px; line-height: 1.7;
-    color: #F5EDE0; direction: rtl; margin-bottom: 20px;
-    text-shadow: 0 1px 8px rgba(212,168,84,0.15);
+    font-family: 'Amiri', 'Traditional Arabic', serif;
+    font-size: calc(clamp(22px, 5.5vw, 32px) * var(--font-scale)); line-height: 1.9; color: #F5EDE0;
+    text-align: center; direction: rtl; margin-bottom: 28px;
+    letter-spacing: 0.02em; text-shadow: 0 1px 8px rgba(0,0,0,0.3);
   }
-  .transliteration {
-    font-family: 'Cormorant Garamond', serif; font-style: italic;
-    font-size: 15px; line-height: 1.6; color: rgba(212,168,84,0.65);
-    letter-spacing: 0.03em;
+  .translit-text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: calc(clamp(14px, 3.5vw, 17px) * var(--font-scale)); font-style: italic;
+    color: rgba(212, 168, 84, 0.75); text-align: center; line-height: 1.6; letter-spacing: 0.03em;
   }
-  .translation {
-    font-family: 'Cormorant Garamond', serif; font-size: 19px;
-    line-height: 1.65; color: #E8E0D4; font-weight: 400;
-    font-style: italic;
+  .english-text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: calc(clamp(18px, 4.5vw, 24px) * var(--font-scale)); font-weight: 400; color: #F5EDE0;
+    text-align: center; line-height: 1.7; letter-spacing: 0.01em;
+  }
+  .tap-hint {
+    font-size: 12px; color: rgba(212,168,84,0.35);
+    text-transform: uppercase; letter-spacing: 0.2em; margin-top: 16px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
   }
 
-  /* Bottom controls */
-  .controls { padding: 10px 20px 24px; flex-shrink: 0; }
-  .mark-row { display: flex; justify-content: center; margin-bottom: 14px; }
-  .mark-btn {
-    display: flex; align-items: center; gap: 7px;
-    background: none; border: 1px solid rgba(212,168,84,0.2);
-    color: rgba(212,168,84,0.55); font-family: inherit;
-    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 9px 20px; border-radius: 4px; cursor: pointer;
-    transition: all 0.25s;
-  }
-  .mark-btn:hover { border-color: rgba(212,168,84,0.5); color: #D4A854; }
-  .mark-btn.active {
-    background: rgba(212,168,84,0.12); border-color: rgba(212,168,84,0.5);
-    color: #D4A854;
-  }
-  .nav-row { display: flex; justify-content: center; gap: 12px; }
   .nav-btn {
-    display: flex; align-items: center; gap: 5px;
-    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(232,224,212,0.55); font-family: inherit;
-    font-size: 13px; letter-spacing: 0.08em;
-    padding: 10px 22px; border-radius: 4px; cursor: pointer;
-    transition: all 0.2s; flex: 1; max-width: 140px; justify-content: center;
+    background: rgba(212,168,84,0.08); border: 1px solid rgba(212,168,84,0.2);
+    border-radius: 14px; color: #D4A854; padding: 12px 20px;
+    font-family: 'Cormorant Garamond', Georgia, serif; font-size: 14px;
+    letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px; white-space: nowrap;
   }
-  .nav-btn:hover:not(:disabled) { background: rgba(255,255,255,0.06); color: #E8E0D4; border-color: rgba(255,255,255,0.15); }
-  .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+  .nav-btn:active { background: rgba(212,168,84,0.18); transform: scale(0.97); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .nav-btn:disabled:active { transform: none; background: rgba(212,168,84,0.08); }
 
-  /* Review empty state */
-  .empty-state {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 220px; text-align: center; padding: 20px;
+  .mark-btn {
+    background: rgba(212,168,84,0.08); border: 1px solid rgba(212,168,84,0.25);
+    border-radius: 14px; color: #D4A854; padding: 10px 16px;
+    font-family: 'Cormorant Garamond', Georgia, serif; font-size: 13px;
+    letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
   }
-  .empty-icon { font-size: 44px; opacity: 0.25; margin-bottom: 14px; }
-  .empty-title { font-size: 18px; color: rgba(245,237,224,0.45); margin-bottom: 6px; }
-  .empty-sub { font-size: 13px; color: rgba(212,168,84,0.3); line-height: 1.5; }
+  .mark-btn:active { transform: scale(0.97); }
+  .mark-btn.active { background: rgba(212,168,84,0.15); border-color: rgba(212,168,84,0.45); }
 
-  /* Reshuffle btn */
-  .reshuffle-btn {
-    background: none; border: none; color: rgba(212,168,84,0.4);
-    cursor: pointer; padding: 4px; display: flex; align-items: center;
-    transition: color 0.2s;
+  .header-btn {
+    background: none; border: 1px solid rgba(212,168,84,0.18);
+    border-radius: 10px; color: #D4A854; padding: 8px 14px;
+    font-family: 'Cormorant Garamond', Georgia, serif; font-size: 13px;
+    letter-spacing: 0.06em; cursor: pointer;
+    display: flex; align-items: center; gap: 6px; transition: all 0.2s; white-space: nowrap;
   }
-  .reshuffle-btn:hover { color: rgba(212,168,84,0.8); }
+  .header-btn:active { background: rgba(212,168,84,0.1); }
+
+  .icon-btn {
+    background: none; border: 1px solid rgba(212,168,84,0.15);
+    border-radius: 10px; color: #D4A854; padding: 7px 9px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:active { background: rgba(212,168,84,0.1); }
+
+  .progress-track { width: 100%; max-width: 420px; height: 3px; background: rgba(212,168,84,0.1); border-radius: 2px; margin: 0 auto; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, rgba(212,168,84,0.3), rgba(212,168,84,0.6)); border-radius: 2px; transition: width 0.4s ease; }
+
+  @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .slideIn { animation: slideIn 0.25s ease; }
+  @keyframes slideOutLeft { to { opacity: 0; transform: translateX(-40px); } }
+  .slideOutLeft { animation: slideOutLeft 0.2s ease forwards; }
+  @keyframes slideOutRight { to { opacity: 0; transform: translateX(40px); } }
+  .slideOutRight { animation: slideOutRight 0.2s ease forwards; }
+
+  .badge { background: rgba(212,168,84,0.25); color: #D4A854; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 8px; min-width: 20px; text-align: center; }
+  .empty-state { text-align: center; padding: 40px 20px; }
+
+  /* Mode toggle */
+  .mode-toggle { display: flex; background: rgba(212,168,84,0.06); border: 1px solid rgba(212,168,84,0.15); border-radius: 10px; overflow: hidden; flex-shrink: 0; }
+  .mode-toggle-btn {
+    padding: 7px 10px; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer; transition: all 0.25s;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: rgba(212,168,84,0.45); background: none; border: none; font-weight: 500;
+  }
+  .mode-toggle-btn.active { color: #D4A854; background: rgba(212,168,84,0.12); }
+
+  /* Multiple Choice */
+  .mc-question-card {
+    width: 100%; max-width: 420px; margin: 0 auto;
+    background: linear-gradient(145deg, #1C2E1E 0%, #162516 50%, #1A2A1B 100%);
+    border: 1px solid rgba(212, 168, 84, 0.2);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(212,168,84,0.08);
+    border-radius: 20px; padding: 28px 24px 24px; position: relative; overflow: hidden;
+  }
+  .mc-option {
+    width: 100%; max-width: 420px; margin: 0 auto;
+    background: rgba(212,168,84,0.04); border: 1px solid rgba(212,168,84,0.15);
+    border-radius: 14px; padding: 14px 18px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: calc(clamp(14px, 3.5vw, 16px) * var(--font-scale)); color: #E8E0D4;
+    text-align: left; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; align-items: flex-start; gap: 12px; line-height: 1.5;
+  }
+  .mc-option:active:not(.mc-locked) { transform: scale(0.98); }
+  .mc-option:not(.mc-locked):hover { background: rgba(212,168,84,0.08); border-color: rgba(212,168,84,0.3); }
+  .mc-option.mc-locked { cursor: default; }
+  .mc-option.mc-correct { background: rgba(76,175,80,0.12); border-color: rgba(76,175,80,0.5); color: #A5D6A7; }
+  .mc-option.mc-wrong { background: rgba(229,115,115,0.1); border-color: rgba(229,115,115,0.4); color: #EF9A9A; }
+  .mc-option.mc-dimmed { opacity: 0.35; }
+  .mc-option .arabic-text { font-size: calc(clamp(18px, 4.5vw, 24px) * var(--font-scale)); margin-bottom: 0; line-height: 1.6; }
+
+  .mc-letter {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid rgba(212,168,84,0.25); display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600; color: rgba(212,168,84,0.6); transition: all 0.25s;
+  }
+  .mc-correct .mc-letter { background: rgba(76,175,80,0.2); border-color: rgba(76,175,80,0.5); color: #A5D6A7; }
+  .mc-wrong .mc-letter { background: rgba(229,115,115,0.15); border-color: rgba(229,115,115,0.4); color: #EF9A9A; }
+
+  .mc-scoreboard { display: flex; justify-content: center; gap: 4px; padding: 0 20px; flex-shrink: 0; }
+  .mc-score-item { display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 8px; font-size: 12px; letter-spacing: 0.06em; }
+  .mc-score-item.correct { color: #A5D6A7; background: rgba(76,175,80,0.08); }
+  .mc-score-item.wrong { color: #EF9A9A; background: rgba(229,115,115,0.06); }
+  .mc-score-item.review { color: #D4A854; background: rgba(212,168,84,0.08); }
+  .mc-score-item.unanswered { color: rgba(212,168,84,0.45); background: rgba(212,168,84,0.04); }
+  .mc-score-num { font-weight: 600; font-size: 15px; }
+
+  @keyframes mcReveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .mc-reveal { animation: mcReveal 0.3s ease both; }
+  .mc-reveal-1 { animation-delay: 50ms; } .mc-reveal-2 { animation-delay: 100ms; }
+  .mc-reveal-3 { animation-delay: 150ms; } .mc-reveal-4 { animation-delay: 200ms; }
+
+  /* Summary / Completion */
+  .mc-complete { text-align: center; padding: 32px 20px; max-width: 380px; margin: 0 auto; }
+  .mc-complete-icon { font-size: 48px; margin-bottom: 16px; }
+  .mc-complete-title { font-size: 28px; color: #F5EDE0; font-weight: 300; margin-bottom: 8px; }
+  .mc-complete-subtitle { font-size: 15px; color: rgba(212,168,84,0.5); margin-bottom: 28px; }
+  .mc-final-stats { display: flex; justify-content: center; gap: 20px; margin-bottom: 32px; flex-wrap: wrap; }
+  .mc-final-stat { text-align: center; }
+  .mc-final-stat-num { font-size: 32px; font-weight: 300; display: block; margin-bottom: 2px; }
+  .mc-final-stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; }
+  .mc-final-stat.correct .mc-final-stat-num { color: #A5D6A7; }
+  .mc-final-stat.wrong .mc-final-stat-num { color: #EF9A9A; }
+  .mc-final-stat.review .mc-final-stat-num { color: #D4A854; }
+
+  .mc-unanswered-btn { color: rgba(212,168,84,0.7) !important; border-color: rgba(212,168,84,0.2) !important; }
+  .mc-finish-btn { background: rgba(76,175,80,0.08) !important; border-color: rgba(76,175,80,0.25) !important; color: #A5D6A7 !important; }
+
+  /* Modal overlay */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal-content {
+    background: linear-gradient(145deg, #1C2E1E 0%, #162516 100%);
+    border: 1px solid rgba(212,168,84,0.25); border-radius: 20px;
+    padding: 28px 24px; max-width: 400px; width: 100%; max-height: 80vh;
+    overflow-y: auto; position: relative;
+  }
+  .modal-title { font-size: 20px; color: #F5EDE0; font-weight: 400; margin-bottom: 20px; text-align: center; }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px; background: none; border: none;
+    color: rgba(212,168,84,0.5); cursor: pointer; font-size: 20px; padding: 4px;
+  }
+
+  /* Settings */
+  .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(212,168,84,0.08); }
+  .setting-label { font-size: 14px; color: #E8E0D4; }
+  .setting-sublabel { font-size: 11px; color: rgba(212,168,84,0.4); margin-top: 2px; }
+  .font-controls { display: flex; gap: 8px; align-items: center; }
+  .font-btn {
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid rgba(212,168,84,0.2);
+    background: rgba(212,168,84,0.06); color: #D4A854; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .font-btn:active { background: rgba(212,168,84,0.15); }
+  .font-size-val { font-size: 13px; color: rgba(212,168,84,0.6); min-width: 36px; text-align: center; }
+
+  /* Toggle switch */
+  .toggle { position: relative; width: 42px; height: 24px; cursor: pointer; flex-shrink: 0; }
+  .toggle input { display: none; }
+  .toggle-track {
+    position: absolute; inset: 0; border-radius: 12px;
+    background: rgba(212,168,84,0.1); border: 1px solid rgba(212,168,84,0.15);
+    transition: all 0.3s;
+  }
+  .toggle input:checked + .toggle-track { background: rgba(212,168,84,0.25); border-color: rgba(212,168,84,0.4); }
+  .toggle-thumb {
+    position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(212,168,84,0.5); transition: all 0.3s;
+  }
+  .toggle input:checked ~ .toggle-thumb { left: 21px; background: #D4A854; }
+
+  /* Category filter pills */
+  .cat-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .cat-pill {
+    padding: 5px 10px; border-radius: 10px; font-size: 11px; letter-spacing: 0.06em;
+    border: 1px solid rgba(212,168,84,0.15); background: rgba(212,168,84,0.04);
+    color: rgba(212,168,84,0.5); cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+  }
+  .cat-pill.active { background: rgba(212,168,84,0.15); border-color: rgba(212,168,84,0.4); color: #D4A854; }
+
+  /* Phrase of the Day */
+  .potd-card {
+    max-width: 420px; width: 100%; margin: 0 auto;
+    background: linear-gradient(145deg, #1C2E1E 0%, #162516 50%, #1A2A1B 100%);
+    border: 1px solid rgba(212,168,84,0.25); border-radius: 20px;
+    padding: 32px 24px; position: relative; overflow: hidden;
+  }
+  .potd-meta { font-size: 11px; color: rgba(212,168,84,0.4); letter-spacing: 0.15em; text-transform: uppercase; text-align: center; margin-top: 16px; }
+  .potd-ref {
+    margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(212,168,84,0.1);
+    font-size: 13px; color: rgba(212,168,84,0.5); line-height: 1.7; text-align: center;
+  }
+  .potd-date { font-size: 12px; color: rgba(212,168,84,0.35); letter-spacing: 0.12em; text-align: center; margin-bottom: 20px; }
+
+  /* Surah ref expandable */
+  .ref-toggle {
+    background: none; border: none; color: rgba(212,168,84,0.45); font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+    font-family: 'Cormorant Garamond', Georgia, serif; padding: 6px 0; transition: color 0.2s;
+  }
+  .ref-toggle:hover { color: rgba(212,168,84,0.7); }
+  .ref-detail {
+    font-size: 12px; color: rgba(212,168,84,0.4); line-height: 1.7;
+    padding: 8px 0 4px; text-align: center;
+  }
+
+
+  /* Keyboard shortcuts modal */
+  .shortcut-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .shortcut-key {
+    background: rgba(212,168,84,0.1); border: 1px solid rgba(212,168,84,0.2);
+    border-radius: 6px; padding: 3px 8px; font-size: 12px; color: #D4A854;
+    font-family: monospace; min-width: 28px; text-align: center;
+  }
+  .shortcut-desc { font-size: 13px; color: rgba(212,168,84,0.5); }
+
+  /* Share button */
+  .share-btn {
+    background: linear-gradient(135deg, rgba(212,168,84,0.12), rgba(212,168,84,0.06));
+    border: 1px solid rgba(212,168,84,0.25); border-radius: 14px;
+    color: #D4A854; padding: 12px 24px; font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 14px; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px; justify-content: center;
+  }
+  .share-btn:active { transform: scale(0.97); background: rgba(212,168,84,0.18); }
+
+  /* Review mistakes list */
+  .mistake-item {
+    padding: 14px 16px; border-bottom: 1px solid rgba(212,168,84,0.06);
+    cursor: pointer; transition: background 0.2s;
+  }
+  .mistake-item:active { background: rgba(212,168,84,0.06); }
+  .mistake-ar { font-family: 'Amiri', serif; font-size: 18px; color: #F5EDE0; direction: rtl; text-align: right; margin-bottom: 4px; }
+  .mistake-en { font-size: 13px; color: rgba(212,168,84,0.5); }
+
+  /* Toast notification */
+  .toast {
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+    background: rgba(212,168,84,0.15); border: 1px solid rgba(212,168,84,0.3);
+    border-radius: 12px; padding: 10px 20px; font-size: 13px; color: #D4A854;
+    z-index: 200; animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
+    backdrop-filter: blur(8px); white-space: nowrap;
+  }
+  @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+  @keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script>
-const { useState, useEffect, useRef, useCallback } = React;
-const e = React.createElement;
 
-const STORAGE_KEY = "quran_flashcards_marked_v2";
+var e = React.createElement;
+var useState = React.useState, useEffect = React.useEffect, useCallback = React.useCallback, useRef = React.useRef, useMemo = React.useMemo;
 
-const PHRASES = [
-  { id: 1, ar: "بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ", tr: "Bismillāhi r-Raḥmāni r-Raḥīm", en: "In the name of Allah, the Most Gracious, the Most Merciful" },
-  { id: 2, ar: "اِنَّ اللّٰهَ غَفُوْرٌ رَّحِيْمٌ", tr: "Inna Allāha Ghafūrun Raḥīm", en: "Indeed, Allah is Forgiving, Merciful" },
-  { id: 3, ar: "وَاللّٰهُ عَلِيْمٌ حَكِيْمٌ", tr: "Wa-Allāhu ʿAlīmun Ḥakīm", en: "And Allah is Knowing, Wise" },
-  { id: 4, ar: "فَبِاَيِّ اٰلَآءِ رَبِّكُمَا تُكَذِّبٰنِ", tr: "Fabi-ayyi ālāʾi Rabbikumā tukadhdhibān", en: "So which of the favors of your Lord would you deny?" },
-  { id: 5, ar: "اِنَّا لِلّٰهِ وَاِنَّآ اِلَيْهِ رَاجِعُوْنَ", tr: "Innā lillāhi wa-innā ilayhi rājiʿūn", en: "Indeed we belong to Allah and to Him we shall return" },
-  { id: 6, ar: "لَا اِلٰهَ اِلَّا اللّٰهُ", tr: "Lā ilāha illā Allāh", en: "There is no god but Allah" },
-  { id: 7, ar: "سُبْحَانَ اللّٰهِ وَبِحَمْدِهِ", tr: "Subḥāna Allāhi wa-biḥamdih", en: "Glory be to Allah and praise be to Him" },
-  { id: 8, ar: "اِنَّ اللّٰهَ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ", tr: "Inna Allāha ʿalā kulli shayʾin Qadīr", en: "Indeed, Allah has power over all things" },
-  { id: 9, ar: "وَهُوَ بِكُلِّ شَيْءٍ عَلِيْمٌ", tr: "Wa-huwa bi-kulli shayʾin ʿAlīm", en: "And He has knowledge of all things" },
-  { id: 10, ar: "حَسْبُنَا اللّٰهُ وَنِعْمَ الْوَكِيْلُ", tr: "Ḥasbunā Allāhu wa-niʿma l-Wakīl", en: "Allah is sufficient for us, and He is the best Disposer of affairs" },
-  { id: 11, ar: "اَللّٰهُ لَا اِلٰهَ اِلَّا هُوَ الْحَيُّ الْقَيُّوْمُ", tr: "Allāhu lā ilāha illā Huwa l-Ḥayyu l-Qayyūm", en: "Allah — there is no god but Him, the Ever-Living, the Self-Sustaining" },
-  { id: 12, ar: "يٰٓاَيُّهَا الَّذِيْنَ اٰمَنُوْا", tr: "Yā ayyuhā lladhīna āmanū", en: "O you who have believed" },
-  { id: 13, ar: "اِنَّ اللّٰهَ مَعَ الصَّابِرِيْنَ", tr: "Inna Allāha maʿa ṣ-ṣābirīn", en: "Indeed, Allah is with the patient" },
-  { id: 14, ar: "وَاللّٰهُ غَفُوْرٌ رَّحِيْمٌ", tr: "Wa-Allāhu Ghafūrun Raḥīm", en: "And Allah is Forgiving, Merciful" },
-  { id: 15, ar: "رَبَّنَا تَقَبَّلْ مِنَّا", tr: "Rabbanā taqabbal minnā", en: "Our Lord, accept from us" },
-  { id: 16, ar: "رَبَّنَآ اٰتِنَا فِى الدُّنْيَا حَسَنَةً", tr: "Rabbanā ātinā fi d-dunyā ḥasanatan", en: "Our Lord, give us good in this world" },
-  { id: 17, ar: "اِنَّ اللّٰهَ سَمِيْعٌ عَلِيْمٌ", tr: "Inna Allāha Samīʿun ʿAlīm", en: "Indeed, Allah is Hearing and Knowing" },
-  { id: 18, ar: "وَعَسٰٓى اَنْ تَكْرَهُوْا شَيْـًٔا وَّهُوَ خَيْرٌ لَّكُمْ", tr: "Wa-ʿasā an takrahū shayʾan wa-huwa khayrun lakum", en: "Perhaps you dislike something which is good for you" },
-  { id: 19, ar: "اِنَّ مَعَ الْعُسْرِ يُسْرًا", tr: "Inna maʿa l-ʿusri yusrā", en: "Indeed, with hardship comes ease" },
-  { id: 20, ar: "وَمَنْ يَّتَوَكَّلْ عَلَى اللّٰهِ فَهُوَ حَسْبُهُ", tr: "Wa-man yatawakkal ʿalā Allāhi fa-huwa ḥasbuh", en: "And whoever relies upon Allah — He is sufficient for him" },
-  { id: 21, ar: "يُرِيْدُ اللّٰهُ بِكُمُ الْيُسْرَ وَلَا يُرِيْدُ بِكُمُ الْعُسْرَ", tr: "Yurīdu Allāhu bikumu l-yusra wa-lā yurīdu bikumu l-ʿusr", en: "Allah intends ease for you and does not intend hardship for you" },
-  { id: 22, ar: "وَاذْكُرُوا اللّٰهَ كَثِيْرًا لَّعَلَّكُمْ تُفْلِحُوْنَ", tr: "Wa-dhkurū Allāha kathīran laʿallakum tufliḥūn", en: "Remember Allah often so that you may succeed" },
-  { id: 23, ar: "اِنَّمَا الْمُؤْمِنُوْنَ اِخْوَةٌ", tr: "Innamā l-muʾminūna ikhwah", en: "The believers are but brothers" },
-  { id: 24, ar: "وَاللّٰهُ يُحِبُّ الْمُحْسِنِيْنَ", tr: "Wa-Allāhu yuḥibbu l-muḥsinīn", en: "And Allah loves the doers of good" },
-  { id: 25, ar: "اِنَّ اللّٰهَ يُحِبُّ التَّوَّابِيْنَ", tr: "Inna Allāha yuḥibbu t-tawwābīn", en: "Indeed, Allah loves those who repent" },
-  { id: 26, ar: "فَاِنَّ مَعَ الْعُسْرِ يُسْرًا", tr: "Fa-inna maʿa l-ʿusri yusrā", en: "So indeed, with hardship will be ease" },
-  { id: 27, ar: "وَمَا تَوْفِيْقِيْٓ اِلَّا بِاللّٰهِ", tr: "Wa-mā tawfīqī illā billāh", en: "And my success is not but through Allah" },
-  { id: 28, ar: "اِنَّ اللّٰهَ لَا يُضِيْعُ اَجْرَ الْمُحْسِنِيْنَ", tr: "Inna Allāha lā yudīʿu ajra l-muḥsinīn", en: "Indeed, Allah does not waste the reward of the doers of good" },
-  { id: 29, ar: "رَبِّ اشْرَحْ لِيْ صَدْرِيْ", tr: "Rabbi shraḥ lī ṣadrī", en: "My Lord, expand for me my chest" },
-  { id: 30, ar: "وَاللّٰهُ خَيْرُ الرَّازِقِيْنَ", tr: "Wa-Allāhu khayru r-rāziqīn", en: "And Allah is the best of providers" },
+var PHRASES = [
+  {id:1,ar:"بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ",tr:"Bismillāhi r-Raḥmāni r-Raḥīm",en:"In the name of Allah, the Most Gracious, the Most Merciful",cat:"dua",freq:114,refs:"Al-Fatihah, and beginning of every surah except At-Tawbah"},
+  {id:2,ar:"اِنَّ اللّٰهَ غَفُوْرٌ رَّحِيْمٌ",tr:"Inna Allāha Ghafūrun Raḥīm",en:"Indeed, Allah is Forgiving, Merciful",cat:"attr",freq:24,refs:"Al-Baqarah, An-Nisa, At-Tawbah, An-Nur, Al-Muzzammil"},
+  {id:3,ar:"وَاللّٰهُ عَلِيْمٌ حَكِيْمٌ",tr:"Wa-Allāhu 'Alīmun Ḥakīm",en:"And Allah is Knowing, Wise",cat:"attr",freq:10,refs:"Al-Baqarah, An-Nisa, At-Tawbah, Al-Mumtahanah"},
+  {id:4,ar:"فَبِاَيِّ اٰلَآءِ رَبِّكُمَا تُكَذِّبٰنِ",tr:"Fabi-ayyi ālā'i Rabbikumā tukadhdhibān",en:"So which of the favors of your Lord would you deny?",cat:"sign",freq:31,refs:"Ar-Rahman (repeated 31 times)"},
+  {id:5,ar:"اِنَّ اللّٰهَ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ",tr:"Inna Allāha 'alā kulli shay'in Qadīr",en:"Indeed, Allah is over all things competent",cat:"attr",freq:12,refs:"Al-Baqarah, Al-Ma'idah, An-Nahl, Al-Ahzab, Fatir"},
+  {id:6,ar:"اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّتَفَكَّرُوْنَ",tr:"Inna fī dhālika la-āyātin li-qawmin yatafakkarūn",en:"Indeed in that are signs for a people who give thought",cat:"sign",freq:5,refs:"Ar-Ra'd, An-Nahl, Ar-Rum, Az-Zumar, Al-Jathiyah"},
+  {id:7,ar:"اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يُّؤْمِنُوْنَ",tr:"Inna fī dhālika la-āyātin li-qawmin yu'minūn",en:"Indeed in that are signs for a people who believe",cat:"sign",freq:3,refs:"Al-An'am, Ar-Rum, An-Naml"},
+  {id:8,ar:"اِنَّ فِيْ ذٰلِكَ لَاٰيٰتٍ لِّقَوْمٍ يَّعْقِلُوْنَ",tr:"Inna fī dhālika la-āyātin li-qawmin ya'qilūn",en:"Indeed in that are signs for a people who reason",cat:"sign",freq:4,refs:"Al-Baqarah, Ar-Ra'd, An-Nahl, Al-Ankabut"},
+  {id:9,ar:"وَاللّٰهُ بِكُلِّ شَيْءٍ عَلِيْمٌ",tr:"Wa-Allāhu bi-kulli shay'in 'Alīm",en:"And Allah is Knowing of all things",cat:"attr",freq:8,refs:"Al-Baqarah, An-Nisa, Al-Mujadilah, At-Taghabun"},
+  {id:10,ar:"اِنَّ اللّٰهَ سَمِيْعٌ عَلِيْمٌ",tr:"Inna Allāha Samī'un 'Alīm",en:"Indeed, Allah is Hearing, Knowing",cat:"attr",freq:6,refs:"Al-Baqarah, Al-Anfal, Al-Hajj, Luqman"},
+  {id:11,ar:"وَيْلٌ يَّوْمَئِذٍ لِّلْمُكَذِّبِيْنَ",tr:"Waylun yawma'idhin lil-mukadhdhibīn",en:"Woe, that Day, to the deniers",cat:"akh",freq:10,refs:"Al-Mursalat (repeated 10 times)"},
+  {id:12,ar:"وَاتَّقُوا اللّٰهَ",tr:"Wa-ttaqū Allāh",en:"And fear Allah",cat:"cmd",freq:8,refs:"Al-Baqarah, Al-Imran, Al-Ma'idah, An-Nur, Al-Hashr"},
+  {id:13,ar:"اِنَّ اللّٰهَ عَزِيْزٌ حَكِيْمٌ",tr:"Inna Allāha 'Azīzun Ḥakīm",en:"Indeed, Allah is Exalted in Might, Wise",cat:"attr",freq:7,refs:"Al-Baqarah, Al-Anfal, At-Tawbah, Ibrahim, Luqman"},
+  {id:14,ar:"لَعَلَّكُمْ تَتَّقُوْنَ",tr:"La'allakum tattaqūn",en:"That you may become righteous",cat:"cmd",freq:3,refs:"Al-Baqarah, Al-A'raf, Al-Mu'minun"},
+  {id:15,ar:"وَاللّٰهُ عَلِيْمٌ بِذَاتِ الصُّدُوْرِ",tr:"Wa-Allāhu 'Alīmun bi-dhāti ṣ-ṣudūr",en:"And Allah is Knowing of what is within the breasts",cat:"attr",freq:6,refs:"Al-Imran, Al-Ma'idah, Al-Anfal, Hud, Fatir, Al-Hadid"},
+  {id:16,ar:"يٰٓاَيُّهَا الَّذِيْنَ اٰمَنُوْا",tr:"Yā ayyuha-lladhīna āmanū",en:"O you who have believed",cat:"faith",freq:89,refs:"Throughout the Quran — primary mode of address to believers"},
+  {id:17,ar:"وَاللّٰهُ غَفُوْرٌ رَّحِيْمٌ",tr:"Wa-Allāhu Ghafūrun Raḥīm",en:"And Allah is Forgiving, Merciful",cat:"attr",freq:14,refs:"Al-Imran, Al-Ma'idah, At-Tawbah, An-Nur, Al-Mumtahanah"},
+  {id:18,ar:"اِنَّ اللّٰهَ لَا يُحِبُّ",tr:"Inna Allāha lā yuḥibbu",en:"Indeed, Allah does not love...",cat:"attr",freq:24,refs:"Al-Baqarah, Al-Imran, Al-Ma'idah, Al-Anfal, Luqman"},
+  {id:19,ar:"اَفَلَا تَعْقِلُوْنَ",tr:"Afalā ta'qilūn",en:"Then will you not reason?",cat:"sign",freq:13,refs:"Al-Baqarah, Al-Imran, Al-An'am, Al-A'raf, Yusuf"},
+  {id:20,ar:"اَفَلَا يَتَدَبَّرُوْنَ",tr:"Afalā yatadabbarūn",en:"Then do they not reflect?",cat:"sign",freq:3,refs:"An-Nisa, Muhammad, Al-Mu'minun"},
+  {id:21,ar:"وَمَا اللّٰهُ بِغَافِلٍ عَمَّا تَعْمَلُوْنَ",tr:"Wa mā Allāhu bi-ghāfilin 'ammā ta'malūn",en:"And Allah is not unaware of what you do",cat:"attr",freq:6,refs:"Al-Baqarah, Al-Imran, Hud, An-Naml"},
+  {id:22,ar:"وَاِلَى اللّٰهِ الْمَصِيْرُ",tr:"Wa ilā-Allāhi l-maṣīr",en:"And to Allah is the destination",cat:"akh",freq:5,refs:"Al-Imran, Al-Ma'idah, An-Nur, Fatir, Ash-Shura"},
+  {id:23,ar:"لَعَلَّكُمْ تُفْلِحُوْنَ",tr:"La'allakum tufliḥūn",en:"That you may succeed",cat:"cmd",freq:5,refs:"Al-Baqarah, Al-Imran, Al-Ma'idah, Al-A'raf, Al-Hajj"},
+  {id:24,ar:"اِنَّ اللّٰهَ كَانَ غَفُوْرًا رَّحِيْمًا",tr:"Inna Allāha kāna Ghafūran Raḥīmā",en:"Indeed, Allah is ever Forgiving, Merciful",cat:"attr",freq:5,refs:"An-Nisa, Al-Ahzab, Al-Fath, Al-Furqan"},
+  {id:25,ar:"وَاللّٰهُ وَاسِعٌ عَلِيْمٌ",tr:"Wa-Allāhu Wāsi'un 'Alīm",en:"And Allah is all-Encompassing, Knowing",cat:"attr",freq:3,refs:"Al-Baqarah, Al-Imran, An-Nur"},
+  {id:26,ar:"اِنَّ اللّٰهَ كَانَ عَلِيْمًا حَكِيْمًا",tr:"Inna Allāha kāna 'Alīman Ḥakīmā",en:"Indeed, Allah is ever Knowing, Wise",cat:"attr",freq:4,refs:"An-Nisa, Al-Ahzab, Al-Insan, Al-Fath"},
+  {id:27,ar:"وَاللّٰهُ يَعْلَمُ وَاَنْتُمْ لَا تَعْلَمُوْنَ",tr:"Wa-Allāhu ya'lamu wa antum lā ta'lamūn",en:"And Allah knows while you know not",cat:"attr",freq:4,refs:"Al-Baqarah, Al-Imran, An-Nur, Al-Hujurat"},
+  {id:28,ar:"قُلْ هُوَ اللّٰهُ اَحَدٌ",tr:"Qul huwa-Allāhu Aḥad",en:"Say: He is Allah, the One",cat:"faith",freq:1,refs:"Al-Ikhlas"},
+  {id:29,ar:"سُبْحٰنَ اللّٰهِ",tr:"Subḥāna-Allāh",en:"Glory be to Allah",cat:"dua",freq:7,refs:"Yusuf, An-Nur, Al-Hadid, Al-Hashr, As-Saff"},
+  {id:30,ar:"اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ",tr:"Al-ḥamdu lillāhi Rabbi l-'ālamīn",en:"All praise is due to Allah, Lord of the worlds",cat:"dua",freq:4,refs:"Al-Fatihah, Al-An'am, As-Saffat, Az-Zumar"},
+  {id:31,ar:"خٰلِدِيْنَ فِيْهَا اَبَدًا",tr:"Khālidīna fīhā abadā",en:"Abiding therein forever",cat:"akh",freq:8,refs:"An-Nisa, Al-Ma'idah, At-Tawbah, Al-Kahf, Al-Ahzab"},
+  {id:32,ar:"تَجْرِيْ مِنْ تَحْتِهَا الْاَنْهٰرُ",tr:"Tajrī min taḥtiha l-anhār",en:"Beneath which rivers flow",cat:"akh",freq:12,refs:"Al-Baqarah, Al-Imran, An-Nisa, Al-Ma'idah, At-Tawbah"},
+  {id:33,ar:"مِنْ دُوْنِ اللّٰهِ",tr:"Min dūni-Allāh",en:"Other than Allah / besides Allah",cat:"faith",freq:25,refs:"Throughout — contrasting true worship with idolatry"},
+  {id:34,ar:"اِنَّ اللّٰهَ كَانَ عَلِيًّا كَبِيْرًا",tr:"Inna Allāha kāna 'Aliyyan Kabīrā",en:"Indeed, Allah is ever High, Grand",cat:"attr",freq:2,refs:"An-Nisa, Luqman"},
+  {id:35,ar:"وَتُوْبُوْٓا اِلَى اللّٰهِ",tr:"Wa tūbū ilā-Allāh",en:"And turn to Allah in repentance",cat:"cmd",freq:2,refs:"An-Nur, At-Tahrim"},
+  {id:36,ar:"فَاتَّقُوا اللّٰهَ وَاَطِيْعُوْنِ",tr:"Fa-ttaqū Allāha wa aṭī'ūn",en:"So fear Allah and obey me",cat:"proph",freq:6,refs:"Ash-Shu'ara (Nuh, Hud, Salih, Lut, Shu'ayb, Musa)"},
+  {id:37,ar:"اِنِّيْ لَكُمْ رَسُوْلٌ اَمِيْنٌ",tr:"Innī lakum rasūlun amīn",en:"Indeed, I am to you a trustworthy messenger",cat:"proph",freq:5,refs:"Ash-Shu'ara (Nuh, Hud, Salih, Lut, Shu'ayb)"},
+  {id:38,ar:"وَمَآ اَرْسَلْنٰكَ اِلَّا رَحْمَةً لِّلْعٰلَمِيْنَ",tr:"Wa mā arsalnāka illā raḥmatan lil-'ālamīn",en:"And We have not sent you except as a mercy to the worlds",cat:"proph",freq:1,refs:"Al-Anbiya"},
+  {id:39,ar:"كَذٰلِكَ يُبَيِّنُ اللّٰهُ لَكُمْ اٰيٰتِهٖ",tr:"Kadhālika yubayyinu Allāhu lakum āyātih",en:"Thus does Allah make clear to you His verses",cat:"sign",freq:4,refs:"Al-Baqarah, Al-Imran, An-Nur, Al-Hadid"},
+  {id:40,ar:"اُولٰٓئِكَ اَصْحٰبُ النَّارِ هُمْ فِيْهَا خٰلِدُوْنَ",tr:"Ulā'ika aṣḥābu n-nār hum fīhā khālidūn",en:"Those are the companions of the Fire; they abide therein eternally",cat:"akh",freq:6,refs:"Al-Baqarah, Al-A'raf, Yunus, Ar-Ra'd"},
+  {id:41,ar:"وَاللّٰهُ لَا يُحِبُّ الظّٰلِمِيْنَ",tr:"Wa-Allāhu lā yuḥibbu ẓ-ẓālimīn",en:"And Allah does not love the wrongdoers",cat:"attr",freq:3,refs:"Al-Imran, Ash-Shura"},
+  {id:42,ar:"اِنَّ اللّٰهَ يُحِبُّ الْمُحْسِنِيْنَ",tr:"Inna Allāha yuḥibbu l-muḥsinīn",en:"Indeed, Allah loves the doers of good",cat:"attr",freq:3,refs:"Al-Baqarah, Al-Imran, Al-Ma'idah"},
+  {id:43,ar:"ذٰلِكَ بِاَنَّهُمْ كَانُوْا يَكْفُرُوْنَ",tr:"Dhālika bi-annahum kānū yakfurūn",en:"That is because they used to disbelieve",cat:"akh",freq:3,refs:"Al-A'raf, Az-Zukhruf, Al-Ahqaf"},
+  {id:44,ar:"اِنَّ فِيْ ذٰلِكَ لَاٰيَةً",tr:"Inna fī dhālika la-āyah",en:"Indeed in that is a sign",cat:"sign",freq:8,refs:"Al-Baqarah, Al-Imran, An-Nahl, Ash-Shu'ara, Al-Ankabut"},
+  {id:45,ar:"وَمَنْ يُّؤْمِنْ بِاللّٰهِ وَالْيَوْمِ الْاٰخِرِ",tr:"Wa man yu'min billāhi wa l-yawmi l-ākhir",en:"And whoever believes in Allah and the Last Day",cat:"faith",freq:6,refs:"Al-Baqarah, An-Nisa, Al-Ma'idah, At-Tawbah"},
+  {id:46,ar:"اِنَّ اللّٰهَ كَانَ سَمِيْعًا بَصِيْرًا",tr:"Inna Allāha kāna Samī'an Baṣīrā",en:"Indeed, Allah is ever Hearing, Seeing",cat:"attr",freq:4,refs:"An-Nisa, Al-Hajj, Luqman, Al-Mujadilah"},
+  {id:47,ar:"وَسَبِّحْ بِحَمْدِ رَبِّكَ",tr:"Wa sabbiḥ bi-ḥamdi Rabbik",en:"And exalt with praise of your Lord",cat:"cmd",freq:5,refs:"Ta-Ha, Qaf, At-Tur, Al-Insan, An-Nasr"},
+  {id:48,ar:"كَذٰلِكَ نُفَصِّلُ الْاٰيٰتِ لِقَوْمٍ يَّعْلَمُوْنَ",tr:"Kadhālika nufaṣṣilu l-āyāti li-qawmin ya'lamūn",en:"Thus We detail the signs for a people who know",cat:"sign",freq:4,refs:"Al-A'raf, Yunus, Al-Fussilat, Al-Jathiyah"},
+  {id:49,ar:"اِنَّ اللّٰهَ لَا يَهْدِي الْقَوْمَ الظّٰلِمِيْنَ",tr:"Inna Allāha lā yahdī l-qawma ẓ-ẓālimīn",en:"Indeed, Allah does not guide the wrongdoing people",cat:"attr",freq:4,refs:"Al-Baqarah, Al-An'am, At-Tawbah, Al-Qasas"},
+  {id:50,ar:"رَبَّنَا لَا تُؤَاخِذْنَآ اِنْ نَّسِيْنَآ اَوْ اَخْطَأْنَا",tr:"Rabbanā lā tu'ākhidhnā in nasīnā aw akhṭa'nā",en:"Our Lord, do not impose blame upon us if we forget or err",cat:"dua",freq:1,refs:"Al-Baqarah"},
+  {id:51,ar:"اِنَّ اللّٰهَ كَانَ تَوَّابًا رَّحِيْمًا",tr:"Inna Allāha kāna Tawwāban Raḥīmā",en:"Indeed, Allah is ever Accepting of repentance, Merciful",cat:"attr",freq:3,refs:"An-Nisa, At-Tawbah, Al-Furqan"},
+  {id:52,ar:"وَاللّٰهُ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ",tr:"Wa-Allāhu 'alā kulli shay'in Qadīr",en:"And Allah is over all things competent",cat:"attr",freq:6,refs:"Al-Ma'idah, Hud, Ar-Ra'd, An-Nahl, Fatir"},
+  {id:53,ar:"اِنَّا كَذٰلِكَ نَجْزِي الْمُحْسِنِيْنَ",tr:"Innā kadhālika najzī l-muḥsinīn",en:"Indeed, We thus reward the doers of good",cat:"akh",freq:3,refs:"As-Saffat, Ad-Dukhan, Al-Mursalat"},
+  {id:54,ar:"وَمَا يَعْلَمُ جُنُوْدَ رَبِّكَ اِلَّا هُوَ",tr:"Wa mā ya'lamu junūda Rabbika illā Huwa",en:"And none knows the soldiers of your Lord except Him",cat:"attr",freq:1,refs:"Al-Muddathir"},
+  {id:55,ar:"فَاذْكُرُوْنِيْ اَذْكُرْكُمْ",tr:"Fa-dhkurūnī adhkurkum",en:"So remember Me; I will remember you",cat:"cmd",freq:1,refs:"Al-Baqarah"},
+  {id:56,ar:"وَاللّٰهُ يَرْزُقُ مَنْ يَّشَآءُ بِغَيْرِ حِسَابٍ",tr:"Wa-Allāhu yarzuqu man yashā'u bi-ghayri ḥisāb",en:"And Allah provides for whom He wills without account",cat:"attr",freq:3,refs:"Al-Baqarah, Al-Imran, An-Nur"},
+  {id:57,ar:"وَاللّٰهُ لَا يُحِبُّ كُلَّ مُخْتَالٍ فَخُوْرٍ",tr:"Wa-Allāhu lā yuḥibbu kulla mukhtālin fakhūr",en:"And Allah does not like every self-deluded boaster",cat:"attr",freq:2,refs:"An-Nisa, Luqman"},
+  {id:58,ar:"اَلَمْ تَرَ اِلَى الَّذِيْنَ",tr:"Alam tara ila-lladhīna",en:"Have you not seen those who...",cat:"sign",freq:20,refs:"Al-Baqarah, Al-Imran, An-Nisa (frequent Quranic opener)"},
+  {id:59,ar:"كُنْتُمْ خَيْرَ اُمَّةٍ اُخْرِجَتْ لِلنَّاسِ",tr:"Kuntum khayra ummatin ukhrijat lin-nās",en:"You are the best nation produced for mankind",cat:"faith",freq:1,refs:"Al-Imran"},
+  {id:60,ar:"وَهُوَ الْعَزِيْزُ الْحَكِيْمُ",tr:"Wa huwa l-'Azīzu l-Ḥakīm",en:"And He is the Exalted in Might, the Wise",cat:"attr",freq:8,refs:"Al-Baqarah, Al-Imran, Ibrahim, An-Nahl, Luqman, Al-Ahqaf"},
+  {id:61,ar:"وَهُوَ السَّمِيْعُ الْعَلِيْمُ",tr:"Wa huwa s-Samī'u l-'Alīm",en:"And He is the Hearing, the Knowing",cat:"attr",freq:4,refs:"Al-Baqarah, Al-An'am, Al-Anbiya, Ash-Shu'ara"},
+  {id:62,ar:"وَاللّٰهُ خَبِيْرٌ بِمَا تَعْمَلُوْنَ",tr:"Wa-Allāhu Khabīrun bimā ta'malūn",en:"And Allah is Acquainted with what you do",cat:"attr",freq:5,refs:"Al-Imran, An-Nur, Al-Hadid, Al-Mujadilah"},
+  {id:63,ar:"اِنَّ اللّٰهَ لَا يَهْدِي الْقَوْمَ الْكٰفِرِيْنَ",tr:"Inna Allāha lā yahdī l-qawma l-kāfirīn",en:"Indeed, Allah does not guide the disbelieving people",cat:"attr",freq:3,refs:"Al-Baqarah, Al-Ma'idah, At-Tawbah"},
+  {id:64,ar:"اِنَّ اللّٰهَ لَا يَهْدِي الْقَوْمَ الْفٰسِقِيْنَ",tr:"Inna Allāha lā yahdī l-qawma l-fāsiqīn",en:"Indeed, Allah does not guide the defiantly disobedient",cat:"attr",freq:4,refs:"Al-Ma'idah, At-Tawbah, As-Saff, Al-Munafiqun"},
+  {id:65,ar:"وَاللّٰهُ عَلٰى كُلِّ شَيْءٍ شَهِيْدٌ",tr:"Wa-Allāhu 'alā kulli shay'in Shahīd",en:"And Allah is, over all things, Witness",cat:"attr",freq:4,refs:"An-Nisa, Al-Ma'idah, Al-Hajj, Saba"},
+  {id:66,ar:"وَلَقَدْ اٰتَيْنَا مُوْسَى الْكِتٰبَ",tr:"Wa laqad ātaynā Mūsā l-Kitāb",en:"And We had certainly given Moses the Scripture",cat:"proph",freq:4,refs:"Al-Baqarah, Al-An'am, Hud, Al-Mu'minun"},
+  {id:67,ar:"اِنَّ رَبَّكَ هُوَ الْعَزِيْزُ الرَّحِيْمُ",tr:"Inna Rabbaka huwa l-'Azīzu r-Raḥīm",en:"Indeed, your Lord - He is the Exalted in Might, the Merciful",cat:"attr",freq:7,refs:"Ash-Shu'ara (repeated for each prophet's story)"},
+  {id:68,ar:"اِنَّ اللّٰهَ لَا يُحِبُّ الْمُعْتَدِيْنَ",tr:"Inna Allāha lā yuḥibbu l-mu'tadīn",en:"Indeed, Allah does not like transgressors",cat:"attr",freq:2,refs:"Al-Baqarah, Al-Ma'idah"},
+  {id:69,ar:"اِنَّ اللّٰهَ يُحِبُّ الْمُتَّقِيْنَ",tr:"Inna Allāha yuḥibbu l-muttaqīn",en:"Indeed, Allah loves the righteous",cat:"attr",freq:2,refs:"Al-Imran, At-Tawbah"},
+  {id:70,ar:"اِنَّ اللّٰهَ كَانَ عَلِيْمًا خَبِيْرًا",tr:"Inna Allāha kāna 'Alīman Khabīrā",en:"Indeed, Allah is ever Knowing, Acquainted",cat:"attr",freq:3,refs:"An-Nisa, Al-Ahzab, Fatir"},
+  {id:71,ar:"وَهُوَ الْغَفُوْرُ الرَّحِيْمُ",tr:"Wa huwa l-Ghafūru r-Raḥīm",en:"And He is the Forgiving, the Merciful",cat:"attr",freq:5,refs:"Al-An'am, Yunus, Yusuf, Az-Zumar"},
+  {id:72,ar:"لَا اِلٰهَ اِلَّا هُوَ",tr:"Lā ilāha illā Huwa",en:"There is no deity except Him",cat:"faith",freq:11,refs:"Al-Baqarah, Al-Imran, An-Nisa, Al-An'am, and others"},
+  {id:73,ar:"اِنَّا كَذٰلِكَ نَجْزِي الْمُتَّقِيْنَ",tr:"Innā kadhālika najzī l-muttaqīn",en:"Indeed, We thus reward the righteous",cat:"akh",freq:2,refs:"As-Saffat, Ad-Dukhan"},
+  {id:74,ar:"يٰٓاَيُّهَا النَّاسُ",tr:"Yā ayyuhā n-nās",en:"O mankind",cat:"faith",freq:20,refs:"Al-Baqarah, An-Nisa, Yunus, Al-Hajj, Luqman, Fatir"},
+  {id:75,ar:"وَاعْبُدُوا اللّٰهَ وَلَا تُشْرِكُوْا بِهٖ شَيْـًٔا",tr:"Wa-'budū Allāha wa lā tushrikū bihi shay'ā",en:"And worship Allah and associate nothing with Him",cat:"cmd",freq:1,refs:"An-Nisa"},
+  {id:76,ar:"اِنَّ اللّٰهَ مَعَ الصّٰبِرِيْنَ",tr:"Inna Allāha ma'a ṣ-ṣābirīn",en:"Indeed, Allah is with the patient",cat:"attr",freq:2,refs:"Al-Baqarah, Al-Anfal"},
+  {id:77,ar:"وَاسْتَغْفِرُوا اللّٰهَ",tr:"Wa-staghfirū Allāh",en:"And seek forgiveness of Allah",cat:"cmd",freq:4,refs:"Al-Baqarah, An-Nisa, Hud, Al-Muzzammil"},
+  {id:78,ar:"قُلْ اِنَّ الْفَضْلَ بِيَدِ اللّٰهِ",tr:"Qul inna l-faḍla bi-yadi-Allāh",en:"Say: Indeed, the bounty is in the hand of Allah",cat:"attr",freq:1,refs:"Al-Imran"},
+  {id:79,ar:"رَبَّنَآ اٰتِنَا فِي الدُّنْيَا حَسَنَةً وَّفِي الْاٰخِرَةِ حَسَنَةً",tr:"Rabbanā ātinā fī d-dunyā ḥasanah wa fī l-ākhirati ḥasanah",en:"Our Lord, give us in this world good and in the Hereafter good",cat:"dua",freq:1,refs:"Al-Baqarah"},
+  {id:80,ar:"هُوَ الَّذِيْ خَلَقَ السَّمٰوٰتِ وَالْاَرْضَ",tr:"Huwa-lladhī khalaqa s-samāwāti wa l-arḍ",en:"It is He who created the heavens and the earth",cat:"sign",freq:4,refs:"Al-An'am, Al-Hadid, At-Taghabun"},
+  {id:81,ar:"ذٰلِكَ فَضْلُ اللّٰهِ يُؤْتِيْهِ مَنْ يَّشَآءُ",tr:"Dhālika faḍlu-Allāhi yu'tīhi man yashā'",en:"That is the bounty of Allah, He gives it to whom He wills",cat:"attr",freq:3,refs:"Al-Ma'idah, Al-Hadid, Al-Jumu'ah"},
+  {id:82,ar:"وَاللّٰهُ ذُو الْفَضْلِ الْعَظِيْمِ",tr:"Wa-Allāhu dhu l-faḍli l-'aẓīm",en:"And Allah is the possessor of great bounty",cat:"attr",freq:4,refs:"Al-Baqarah, Al-Imran, Al-Anfal, Al-Hadid, Al-Jumu'ah"},
+  {id:83,ar:"اِنَّ اللّٰهَ عَلِيْمٌ بِمَا يَفْعَلُوْنَ",tr:"Inna Allāha 'Alīmun bimā yaf'alūn",en:"Indeed, Allah is Knowing of what they do",cat:"attr",freq:3,refs:"Al-Baqarah, An-Nahl, An-Nur"},
+  {id:84,ar:"وَلَا تُفْسِدُوْا فِي الْاَرْضِ",tr:"Wa lā tufsidū fī l-arḍ",en:"And do not cause corruption on the earth",cat:"cmd",freq:5,refs:"Al-Baqarah, Al-A'raf, Hud, Al-Qasas, Ash-Shu'ara"},
+  {id:85,ar:"اُولٰٓئِكَ لَهُمْ عَذَابٌ اَلِيْمٌ",tr:"Ulā'ika lahum 'adhābun alīm",en:"Those will have a painful punishment",cat:"akh",freq:10,refs:"Al-Imran, At-Tawbah, Al-Hajj, Luqman, Al-Jathiyah"},
+  {id:86,ar:"يَوْمَ الْقِيٰمَةِ",tr:"Yawma l-Qiyāmah",en:"The Day of Resurrection",cat:"akh",freq:70,refs:"Throughout the Quran — one of the most frequent eschatological phrases"},
+  {id:87,ar:"اٰمَنُوْا وَعَمِلُوا الصّٰلِحٰتِ",tr:"Āmanū wa 'amilū ṣ-ṣāliḥāt",en:"Believed and did righteous deeds",cat:"faith",freq:30,refs:"Al-Baqarah, An-Nisa, Hud, Al-Kahf, and many others"},
+  {id:88,ar:"الْحَمْدُ لِلّٰهِ",tr:"Al-ḥamdu lillāh",en:"All praise is due to Allah",cat:"dua",freq:23,refs:"Al-Fatihah, Al-An'am, Yunus, Ibrahim, An-Naml, and others"},
+  {id:89,ar:"اَقِيْمُوا الصَّلٰوةَ وَاٰتُوا الزَّكٰوةَ",tr:"Aqīmu ṣ-ṣalāta wa ātū z-zakāh",en:"Establish prayer and give zakah",cat:"cmd",freq:8,refs:"Al-Baqarah, An-Nisa, Al-Hajj, An-Nur, Al-Muzzammil"},
+  {id:90,ar:"وَبِالْاٰخِرَةِ هُمْ يُوْقِنُوْنَ",tr:"Wa bil-ākhirati hum yūqinūn",en:"And of the Hereafter they are certain",cat:"faith",freq:3,refs:"Al-Baqarah, Luqman, An-Naml"},
+  {id:91,ar:"وَلَقَدْ اَرْسَلْنَا",tr:"Wa laqad arsalnā",en:"And We had certainly sent",cat:"proph",freq:12,refs:"Al-A'raf, Hud, Al-Mu'minun, and others"},
+  {id:92,ar:"اِنَّا اَنْزَلْنٰهُ قُرْاٰنًا عَرَبِيًّا",tr:"Innā anzalnāhu Qur'ānan 'Arabiyyā",en:"Indeed, We have sent it down as an Arabic Quran",cat:"sign",freq:2,refs:"Yusuf, Az-Zukhruf"},
+  {id:93,ar:"وَاِذْ قَالَ مُوْسٰى لِقَوْمِهٖ",tr:"Wa idh qāla Mūsā li-qawmih",en:"And [recall] when Moses said to his people",cat:"proph",freq:5,refs:"Al-Baqarah, Al-A'raf, Ibrahim, As-Saff"},
+  {id:94,ar:"اِنَّ الَّذِيْنَ كَفَرُوْا",tr:"Inna-lladhīna kafarū",en:"Indeed, those who disbelieved",cat:"faith",freq:20,refs:"Al-Baqarah, Al-Imran, An-Nisa, and many others"},
+  {id:95,ar:"اِنَّ الَّذِيْنَ اٰمَنُوْا",tr:"Inna-lladhīna āmanū",en:"Indeed, those who believed",cat:"faith",freq:20,refs:"Al-Baqarah, An-Nisa, Al-Ma'idah, and many others"},
+  {id:96,ar:"وَلَا تَقْرَبُوا",tr:"Wa lā taqrabū",en:"And do not approach",cat:"cmd",freq:5,refs:"Al-Baqarah, An-Nisa, Al-An'am, Al-Isra"},
+  {id:97,ar:"اِنَّ رَبَّكَ لَذُوْ مَغْفِرَةٍ",tr:"Inna Rabbaka la-dhū maghfirah",en:"Indeed, your Lord is full of forgiveness",cat:"attr",freq:2,refs:"Al-A'raf, Fussilat"},
+  {id:98,ar:"كَذٰلِكَ يَطْبَعُ اللّٰهُ عَلٰى قُلُوْبِ الَّذِيْنَ لَا يَعْلَمُوْنَ",tr:"Kadhālika yaṭba'u-Allāhu 'alā qulūbi-lladhīna lā ya'lamūn",en:"Thus does Allah seal the hearts of those who do not know",cat:"attr",freq:2,refs:"Al-A'raf, Ar-Rum"},
+  {id:99,ar:"اِنَّ اللّٰهَ يُحِبُّ التَّوَّابِيْنَ",tr:"Inna Allāha yuḥibbu t-tawwābīn",en:"Indeed, Allah loves those who are constantly repentant",cat:"attr",freq:1,refs:"Al-Baqarah"},
+  {id:100,ar:"وَمَنْ يَّتَوَكَّلْ عَلَى اللّٰهِ فَهُوَ حَسْبُهٗ",tr:"Wa man yatawakkal 'alā-Allāhi fa-huwa ḥasbuh",en:"And whoever relies upon Allah - then He is sufficient for him",cat:"faith",freq:2,refs:"At-Talaq, Al-Anfal"}
 ];
 
+var CATEGORIES = {attr:"Allah's Attributes",cmd:"Commands",akh:"Hereafter",dua:"Du\u2019as",proph:"Prophetic",sign:"Signs & Reflection",faith:"Faith & Belief"};
+var CAT_KEYS = ["attr","cmd","akh","dua","proph","sign","faith"];
+var LETTERS = ["A","B","C","D"];
+
 function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
   return a;
 }
+function loadMarked() { try { var d = localStorage.getItem("q100-marked"); return d ? new Set(JSON.parse(d)) : new Set(); } catch(e) { return new Set(); } }
+function saveMarked(s) { try { localStorage.setItem("q100-marked", JSON.stringify(Array.from(s))); } catch(e) {} }
+function loadFontScale() { try { return parseFloat(localStorage.getItem("q100-fs")) || 1; } catch(e) { return 1; } }
+function saveFontScale(v) { try { localStorage.setItem("q100-fs", String(v)); } catch(e) {} }
 
-// SVG icons
-function BookmarkSvg(filled) {
-  return e("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: filled ? "currentColor" : "none", stroke: "currentColor", strokeWidth: 2 },
-    e("path", { d: "M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" })
-  );
-}
-function ChevLeft() {
-  return e("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2 },
-    e("polyline", { points: "15 18 9 12 15 6" })
-  );
-}
-function ChevRight() {
-  return e("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2 },
-    e("polyline", { points: "9 18 15 12 9 6" })
-  );
-}
-function ReshuffleSvg() {
-  return e("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2 },
-    e("polyline", { points: "17 1 21 5 17 9" }),
-    e("path", { d: "M3 11V9a4 4 0 0 1 4-4h14" }),
-    e("polyline", { points: "7 23 3 19 7 15" }),
-    e("path", { d: "M21 13v2a4 4 0 0 1-4 4H3" })
-  );
+function genOptions(correct, pool, reverse) {
+  var wrong = pool.filter(function(p) { return p.id !== correct.id; });
+  var picked = shuffle(wrong).slice(0, 3);
+  var opts = picked.map(function(p) { return { id: p.id, ar: p.ar, en: p.en, correct: false }; });
+  opts.push({ id: correct.id, ar: correct.ar, en: correct.en, correct: true });
+  return shuffle(opts);
 }
 
-function Card({ card, flipped, onFlip, animKey }) {
-  return e("div", { className: "card-wrapper" },
-    e("div", { className: "card-inner" + (flipped ? " flipped" : ""), onClick: onFlip, key: animKey },
-      // Front
-      e("div", { className: "card-face" },
-        e("div", { className: "card-label" }, "Tap to reveal translation"),
-        e("div", { className: "arabic-text" }, card.ar),
-        e("div", { className: "transliteration" }, card.tr),
-        e("div", { className: "card-hint" }, "tap to flip")
-      ),
-      // Back
-      e("div", { className: "card-face card-back" },
-        e("div", { className: "card-label" }, "Translation"),
-        e("div", { className: "translation" }, card.en)
-      )
-    )
-  );
+function getDailyPhrase() {
+  var d = new Date();
+  var seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  return PHRASES[seed % PHRASES.length];
 }
 
+
+function filterByCategories(phrases, cats) {
+  if (!cats || cats.length === 0) return phrases;
+  return phrases.filter(function(p) { return cats.indexOf(p.cat) !== -1; });
+}
+
+// ── SVG Icons ──
+function I(props) {
+  var ch = props.children || [];
+  return e("svg", {width:props.w||20,height:props.h||20,viewBox:"0 0 24 24",fill:props.fill||"none",stroke:props.stroke||"currentColor",strokeWidth:props.sw||"2",strokeLinecap:"round",strokeLinejoin:"round",style:props.style}, ch.length !== undefined ? ch : [ch]);
+}
+function ChevL() { return e(I, {}, e("polyline",{points:"15 18 9 12 15 6",key:"c"})); }
+function ChevR() { return e(I, {}, e("polyline",{points:"9 18 15 12 9 6",key:"c"})); }
+function BookmarkI(f) { return e(I, {w:18,h:18,fill:f?"#D4A854":"none",stroke:"#D4A854"}, e("path",{d:"M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z",key:"b"})); }
+function ListI() { return e(I, {}, [e("line",{x1:8,y1:6,x2:21,y2:6,key:"1"}),e("line",{x1:8,y1:12,x2:21,y2:12,key:"2"}),e("line",{x1:8,y1:18,x2:21,y2:18,key:"3"}),e("line",{x1:3,y1:6,x2:3.01,y2:6,key:"4"}),e("line",{x1:3,y1:12,x2:3.01,y2:12,key:"5"}),e("line",{x1:3,y1:18,x2:3.01,y2:18,key:"6"})]); }
+function BackI() { return e(I, {sw:"2.5"}, [e("line",{x1:19,y1:12,x2:5,y2:12,key:"1"}),e("polyline",{points:"12 19 5 12 12 5",key:"2"})]); }
+function ShuffleI() { return e(I, {w:18,h:18}, [e("polyline",{points:"16 3 21 3 21 8",key:"1"}),e("line",{x1:4,y1:20,x2:21,y2:3,key:"2"}),e("polyline",{points:"21 16 21 21 16 21",key:"3"}),e("line",{x1:15,y1:15,x2:21,y2:21,key:"4"}),e("line",{x1:4,y1:4,x2:9,y2:9,key:"5"})]); }
+function CheckI() { return e(I, {w:16,h:16,sw:"2.5"}, e("polyline",{points:"20 6 9 17 4 12",key:"ck"})); }
+function XI() { return e(I, {w:16,h:16,sw:"2.5"}, [e("line",{x1:18,y1:6,x2:6,y2:18,key:"x1"}),e("line",{x1:6,y1:6,x2:18,y2:18,key:"x2"})]); }
+function SettingsI() { return e(I, {w:18,h:18}, [e("circle",{cx:12,cy:12,r:3,key:"c"}),e("path",{d:"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z",key:"p"})]); }
+function HelpI() { return e(I, {w:16,h:16}, [e("circle",{cx:12,cy:12,r:10,key:"c"}),e("path",{d:"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",key:"p"}),e("line",{x1:12,y1:17,x2:12.01,y2:17,key:"d"})]); }
+
+function ShareI() { return e(I, {w:18,h:18}, [e("circle",{cx:18,cy:5,r:3,key:"1"}),e("circle",{cx:6,cy:12,r:3,key:"2"}),e("circle",{cx:18,cy:19,r:3,key:"3"}),e("line",{x1:8.59,y1:13.51,x2:15.42,y2:17.49,key:"4"}),e("line",{x1:15.41,y1:6.51,x2:8.59,y2:10.49,key:"5"})]); }
+function SunI() { return e(I, {w:16,h:16}, [e("circle",{cx:12,cy:12,r:5,key:"c"}),e("line",{x1:12,y1:1,x2:12,y2:3,key:"1"}),e("line",{x1:12,y1:21,x2:12,y2:23,key:"2"}),e("line",{x1:4.22,y1:4.22,x2:5.64,y2:5.64,key:"3"}),e("line",{x1:18.36,y1:18.36,x2:19.78,y2:19.78,key:"4"}),e("line",{x1:1,y1:12,x2:3,y2:12,key:"5"}),e("line",{x1:21,y1:12,x2:23,y2:12,key:"6"})]); }
+function ReverseI() { return e(I, {w:16,h:16}, [e("polyline",{points:"17 1 21 5 17 9",key:"1"}),e("path",{d:"M3 11V9a4 4 0 0 1 4-4h14",key:"2"}),e("polyline",{points:"7 23 3 19 7 15",key:"3"}),e("path",{d:"M21 13v2a4 4 0 0 1-4 4H3",key:"4"})]); }
+function StopI() { return e(I, {w:16,h:16,sw:"2.5"}, e("rect",{x:6,y:6,width:12,height:12,rx:1,key:"s"})); }
+
+// ══════════════════════════════════════════
+// APP
+// ══════════════════════════════════════════
 function App() {
-  const [deck, setDeck] = useState(() => shuffle(PHRASES));
-  const [index, setIndex] = useState(0);
-  const [flipped, setFlipped] = useState(false);
-  const [marked, setMarked] = useState(() => {
-    try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")); }
-    catch { return new Set(); }
-  });
-  const [view, setView] = useState("study"); // "study" | "review"
-  const [reviewDeck, setReviewDeck] = useState([]);
-  const [reviewIndex, setReviewIndex] = useState(0);
-  const [reviewFlipped, setReviewFlipped] = useState(false);
-  const touchStart = useRef(null);
+  // ── Global state ──
+  var _m = useState("flashcard"); var appMode = _m[0]; var setAppMode = _m[1];
+  var _fs = useState(loadFontScale); var fontScale = _fs[0]; var setFontScale = _fs[1];
+  var _mk = useState(loadMarked); var marked = _mk[0]; var setMarked = _mk[1];
+  var _mod = useState(null); var modal = _mod[0]; var setModal = _mod[1]; // "settings","shortcuts","mistakes","refs"
+  var _toast = useState(null); var toast = _toast[0]; var setToast = _toast[1];
+  var _cats = useState([]); var activeCats = _cats[0]; var setActiveCats = _cats[1];
+  var _rev = useState(false); var reverseMode = _rev[0]; var setReverseMode = _rev[1];
+  var _refExp = useState(null); var refExpanded = _refExp[0]; var setRefExpanded = _refExp[1];
 
-  // Persist marked
-  useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...marked])); }
-    catch {}
-  }, [marked]);
+  // ── Flashcard state ──
+  var _dk = useState(function() { return shuffle(PHRASES); }); var deck = _dk[0]; var setDeck = _dk[1];
+  var _ix = useState(0); var index = _ix[0]; var setIndex = _ix[1];
+  var _fl = useState(false); var flipped = _fl[0]; var setFlipped = _fl[1];
+  var _vw = useState("study"); var fcView = _vw[0]; var setFcView = _vw[1];
+  var _rd = useState([]); var reviewDeck = _rd[0]; var setReviewDeck = _rd[1];
+  var _ri = useState(0); var reviewIndex = _ri[0]; var setReviewIndex = _ri[1];
+  var _rf = useState(false); var reviewFlipped = _rf[0]; var setReviewFlipped = _rf[1];
+  var _sw = useState(null); var swipeDir = _sw[0]; var setSwipeDir = _sw[1];
+  var touchStart = useRef(null);
+  var touchStartY = useRef(null);
 
-  // Build review deck when entering review mode
-  function openReview() {
-    const rd = PHRASES.filter(p => marked.has(p.id));
-    setReviewDeck(rd);
-    setReviewIndex(0);
-    setReviewFlipped(false);
-    setView("review");
-  }
-  function closeReview() {
-    setView("study");
-  }
+  // ── MC (Quiz) state ──
+  var _mcDk = useState(function() { return shuffle(PHRASES); }); var mcDeck = _mcDk[0]; var setMcDeck = _mcDk[1];
+  var _mcIx = useState(0); var mcIdx = _mcIx[0]; var setMcIdx = _mcIx[1];
+  var _mcOpt = useState([]); var mcOptions = _mcOpt[0]; var setMcOptions = _mcOpt[1];
+  var _mcAns = useState({}); var mcAnswers = _mcAns[0]; var setMcAnswers = _mcAns[1];
+  var _mcDone = useState(false); var mcDone = _mcDone[0]; var setMcDone = _mcDone[1];
+  var mcCache = useRef({});
 
-  const isReview = view === "review";
-  const cDeck = isReview ? reviewDeck : deck;
-  const cIdx = isReview ? reviewIndex : index;
-  const cFlip = isReview ? reviewFlipped : flipped;
-  const setCIdx = isReview ? setReviewIndex : setIndex;
-  const setCFlip = isReview ? setReviewFlipped : setFlipped;
-  const card = cDeck[cIdx] || null;
+  // Derived MC
+  var mcVals = Object.values(mcAnswers);
+  var mcCorrect = mcVals.filter(function(a) { return a.correct; }).length;
+  var mcWrong = mcVals.filter(function(a) { return !a.correct; }).length;
+  var mcUnanswered = mcDeck.length - mcVals.length;
+  var mcSelected = mcAnswers[mcIdx] != null ? mcAnswers[mcIdx].optIdx : null;
+  var mcCard = mcDeck[mcIdx] || null;
 
-  function goPrev() {
-    if (cIdx > 0) { setCIdx(i => i - 1); setCFlip(false); }
-  }
-  function goNext() {
-    if (cIdx < cDeck.length - 1) { setCIdx(i => i + 1); setCFlip(false); }
-  }
-  function toggleMark() {
-    if (!card) return;
-    setMarked(prev => {
-      const next = new Set(prev);
-      next.has(card.id) ? next.delete(card.id) : next.add(card.id);
+  // Derived flashcard
+  var isReview = fcView === "review";
+  var cDeck = isReview ? reviewDeck : deck;
+  var cIdx = isReview ? reviewIndex : index;
+  var cFlip = isReview ? reviewFlipped : flipped;
+  var setCIdx = isReview ? setReviewIndex : setIndex;
+  var setCFlip = isReview ? setReviewFlipped : setFlipped;
+  var card = cDeck[cIdx];
+
+  // POTD
+  var potd = useMemo(getDailyPhrase, []);
+
+  // ── Effects ──
+  useEffect(function() { saveMarked(marked); }, [marked]);
+  useEffect(function() {
+    saveFontScale(fontScale);
+    document.documentElement.style.setProperty('--font-scale', String(fontScale));
+  }, [fontScale]);
+
+  // Init MC options with cache
+  useEffect(function() {
+    if (mcDeck.length > 0 && mcIdx < mcDeck.length) {
+      if (mcCache.current[mcIdx]) { setMcOptions(mcCache.current[mcIdx]); }
+      else { var o = genOptions(mcDeck[mcIdx], PHRASES, reverseMode); mcCache.current[mcIdx] = o; setMcOptions(o); }
+    }
+  }, [mcDeck, mcIdx, reverseMode]);
+
+  // Toast auto-dismiss
+  useEffect(function() {
+    if (!toast) return;
+    var t = setTimeout(function() { setToast(null); }, 2000);
+    return function() { clearTimeout(t); };
+  }, [toast]);
+
+  // ── Font scale ──
+  var fontUp = function() { setFontScale(function(v) { return Math.min(v + 0.1, 1.5); }); };
+  var fontDown = function() { setFontScale(function(v) { return Math.max(v - 0.1, 0.7); }); };
+
+
+  // ── Category toggle ──
+  var toggleCat = function(cat) {
+    setActiveCats(function(prev) {
+      var idx = prev.indexOf(cat);
+      if (idx === -1) return prev.concat([cat]);
+      var next = prev.slice(); next.splice(idx, 1); return next;
+    });
+  };
+
+  // ── Mode switching (preserves state) ──
+  var switchMode = function(mode) { setAppMode(mode); };
+
+  // ── Flashcard actions ──
+  var reshuffle = function() {
+    var pool = filterByCategories(PHRASES, activeCats);
+    if (pool.length === 0) pool = PHRASES;
+    setDeck(shuffle(pool)); setIndex(0); setFlipped(false); setFcView("study"); setRefExpanded(null);
+  };
+
+  var goNext = useCallback(function() {
+    if (cIdx < cDeck.length - 1) {
+      setSwipeDir("left");
+      setTimeout(function() { setCIdx(function(i) { return i + 1; }); setCFlip(false); setSwipeDir(null); setRefExpanded(null); }, 200);
+    }
+  }, [cIdx, cDeck.length, setCIdx, setCFlip]);
+
+  var goPrev = useCallback(function() {
+    if (cIdx > 0) {
+      setSwipeDir("right");
+      setTimeout(function() { setCIdx(function(i) { return i - 1; }); setCFlip(false); setSwipeDir(null); setRefExpanded(null); }, 200);
+    }
+  }, [cIdx, setCIdx, setCFlip]);
+
+  var toggleMark = function() {
+    var c = appMode === "mc" ? mcCard : card;
+    if (!c) return;
+    setMarked(function(prev) { var n = new Set(prev); if (n.has(c.id)) n.delete(c.id); else n.add(c.id); return n; });
+  };
+
+  var openReview = function() {
+    var items = PHRASES.filter(function(p) { return marked.has(p.id); });
+    if (items.length === 0) { setToast("No phrases marked for review"); return; }
+    setReviewDeck(shuffle(items)); setReviewIndex(0); setReviewFlipped(false); setFcView("review");
+    if (appMode !== "flashcard") setAppMode("flashcard");
+  };
+
+  // ── MC actions ──
+  var mcAnswer = useCallback(function(optIdx) {
+    if (mcAnswers[mcIdx] != null || mcDone) return;
+    setMcAnswers(function(prev) {
+      var next = Object.assign({}, prev);
+      next[mcIdx] = { optIdx: optIdx, correct: mcOptions[optIdx].correct };
       return next;
     });
-  }
-  function reshuffle() {
-    setDeck(shuffle(PHRASES));
-    setIndex(0);
-    setFlipped(false);
-  }
+  }, [mcAnswers, mcIdx, mcDone, mcOptions]);
 
-  // Swipe
-  function onTouchStart(evt) { touchStart.current = evt.touches[0].clientX; }
-  function onTouchEnd(evt) {
-    if (touchStart.current === null) return;
-    const diff = touchStart.current - evt.changedTouches[0].clientX;
-    touchStart.current = null;
-    if (Math.abs(diff) < 40) return;
-    diff > 0 ? goNext() : goPrev();
-  }
+  var mcGoNext = useCallback(function() {
+    if (mcIdx < mcDeck.length - 1) { setMcIdx(function(i) { return i + 1; }); setRefExpanded(null); }
+  }, [mcIdx, mcDeck.length]);
 
-  // Keyboard
-  useEffect(() => {
-    function onKey(e) {
-      if (e.key === "ArrowRight") goNext();
-      else if (e.key === "ArrowLeft") goPrev();
-      else if (e.key === " ") { e.preventDefault(); setCFlip(f => !f); }
+  var mcGoPrev = useCallback(function() {
+    if (mcIdx > 0) { setMcIdx(function(i) { return i - 1; }); setRefExpanded(null); }
+  }, [mcIdx]);
+
+  var mcGoUnanswered = function() {
+    for (var off = 1; off <= mcDeck.length; off++) {
+      var idx = (mcIdx + off) % mcDeck.length;
+      if (mcAnswers[idx] == null) { setMcIdx(idx); setMcDone(false); setRefExpanded(null); return; }
     }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  });
+  };
 
+  var mcRestart = function() {
+    var pool = filterByCategories(PHRASES, activeCats);
+    if (pool.length === 0) pool = PHRASES;
+    var nd = shuffle(pool); mcCache.current = {};
+    setMcDeck(nd); setMcIdx(0); setMcAnswers({}); setMcDone(false); setRefExpanded(null);
+    var o = genOptions(nd[0], PHRASES, reverseMode); mcCache.current[0] = o; setMcOptions(o);
+  };
+
+  var mcEndSession = function() { setMcDone(true); };
+
+  // Jump to specific wrong answer
+  var mcJumpToMistake = function(deckIdx) {
+    setMcIdx(deckIdx); setMcDone(false); setModal(null); setRefExpanded(null);
+  };
+
+  // ── Swipe (both modes) ──
+  var onTS = function(ev) { touchStart.current = ev.touches[0].clientX; touchStartY.current = ev.touches[0].clientY; };
+  var onTE = function(ev) {
+    if (touchStart.current === null) return;
+    var dx = ev.changedTouches[0].clientX - touchStart.current;
+    var dy = ev.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 60) {
+      if (appMode === "flashcard") { if (dx > 0) goPrev(); else goNext(); }
+      else if (appMode === "mc" && !mcDone) { if (dx > 0) mcGoPrev(); else mcGoNext(); }
+    }
+    touchStart.current = null;
+  };
+
+  // ── Keyboard ──
+  useEffect(function() {
+    var h = function(ev) {
+      if (modal) return;
+      if (ev.key === "?") { setModal("shortcuts"); return; }
+      if (appMode === "flashcard") {
+        if (ev.key === "ArrowRight") goNext();
+        else if (ev.key === "ArrowLeft") goPrev();
+        else if (ev.key === " ") { ev.preventDefault(); setCFlip(function(f) { return !f; }); }
+        else if (ev.key === "m") toggleMark();
+      } else if (appMode === "mc" && !mcDone) {
+        if (ev.key >= "1" && ev.key <= "4") mcAnswer(parseInt(ev.key) - 1);
+        else if (ev.key === "ArrowRight") mcGoNext();
+        else if (ev.key === "ArrowLeft") mcGoPrev();
+        else if (ev.key === "m") toggleMark();
+      }
+    };
+    window.addEventListener("keydown", h);
+    return function() { window.removeEventListener("keydown", h); };
+  }, [appMode, goNext, goPrev, setCFlip, mcAnswer, mcDone, mcGoNext, mcGoPrev, modal]);
+
+  // ── Share ──
+  var shareResult = function() {
+    var pct = mcDeck.length > 0 ? Math.round(mcCorrect / mcDeck.length * 100) : 0;
+    var txt = "I scored " + mcCorrect + "/" + mcDeck.length + " (" + pct + "%) on 100Q! \uD83C\uDF19\n\nLearn the 100 most repeated Qur'anic phrases:\nihsan.build/app1";
+    if (navigator.share) {
+      navigator.share({ text: txt }).catch(function() {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(txt).then(function() { setToast("Copied to clipboard!"); });
+    } else {
+      setToast("Share not available");
+    }
+  };
+
+  // ── Render helpers ──
+  var slideClass = swipeDir === "left" ? "slideOutLeft" : swipeDir === "right" ? "slideOutRight" : "slideIn";
+
+
+  var renderRefToggle = function(phrase) {
+    var isExp = refExpanded === phrase.id;
+    return e("div", { style: { textAlign: "center", marginTop: "8px" } },
+      e("button", {
+        className: "ref-toggle",
+        onClick: function(ev) { ev.stopPropagation(); setRefExpanded(isExp ? null : phrase.id); }
+      }, isExp ? "\u25B2 Hide References" : "\u25BC Appears " + phrase.freq + "x in the Qur'an"),
+      isExp ? e("div", { className: "ref-detail" }, phrase.refs) : null
+    );
+  };
+
+  var renderCard = function(c, isFlipped, onFlip, k) {
+    return e("div", { className: "card-wrapper " + slideClass, key: k },
+      e("div", { className: "card-inner" + (isFlipped ? " flipped" : ""), onClick: onFlip },
+        e("div", { className: "card-face card-front" },
+          e("div", { className: "ornament ornament-top" }),
+          e("div", { className: "ornament-dot ornament-dot-top" }),
+          e("div", { className: "arabic-text" }, c.ar),
+          e("div", { className: "translit-text" }, c.tr),
+          e("div", { className: "tap-hint" }, "tap to reveal"),
+          e("div", { className: "ornament ornament-bottom" }),
+          e("div", { className: "ornament-dot ornament-dot-bottom" })
+        ),
+        e("div", { className: "card-face card-back" },
+          e("div", { className: "ornament ornament-top" }),
+          e("div", { className: "ornament-dot ornament-dot-top" }),
+          e("div", { className: "english-text" }, c.en),
+          renderRefToggle(c),
+          e("div", { className: "tap-hint" }, "tap to flip back"),
+          e("div", { className: "ornament ornament-bottom" }),
+          e("div", { className: "ornament-dot ornament-dot-bottom" })
+        )
+      )
+    );
+  };
+
+  // ── Mode toggle ──
+  var modeToggle = e("div", { className: "mode-toggle" },
+    e("button", { className: "mode-toggle-btn" + (appMode === "flashcard" ? " active" : ""), onClick: function() { switchMode("flashcard"); } }, "Cards"),
+    e("button", { className: "mode-toggle-btn" + (appMode === "mc" ? " active" : ""), onClick: function() { switchMode("mc"); } }, "Quiz"),
+    e("button", { className: "mode-toggle-btn" + (appMode === "potd" ? " active" : ""), onClick: function() { switchMode("potd"); } }, "\u2606 Daily")
+  );
+
+  // ── Header icons (settings + shortcuts) ──
+  var headerIcons = e("div", { style: { display: "flex", gap: "6px", alignItems: "center" } },
+    e("button", { className: "icon-btn", onClick: function() { setModal("settings"); }, title: "Settings" }, SettingsI()),
+    e("button", { className: "icon-btn", onClick: function() { setModal("shortcuts"); }, title: "Keyboard shortcuts" }, HelpI())
+  );
+
+  // ═══════════════════════════════════
+  // MODALS
+  // ═══════════════════════════════════
+  var renderModal = function() {
+    if (!modal) return null;
+    var content = null;
+
+    if (modal === "settings") {
+      content = e("div", { className: "modal-content" },
+        e("button", { className: "modal-close", onClick: function() { setModal(null); } }, "\u2715"),
+        e("div", { className: "modal-title" }, "Settings"),
+        // Font size
+        e("div", { className: "setting-row" },
+          e("div", null,
+            e("div", { className: "setting-label" }, "Font Size"),
+            e("div", { className: "setting-sublabel" }, Math.round(fontScale * 100) + "%")
+          ),
+          e("div", { className: "font-controls" },
+            e("button", { className: "font-btn", onClick: fontDown }, "A\u2212"),
+            e("div", { className: "font-size-val" }, Math.round(fontScale * 100) + "%"),
+            e("button", { className: "font-btn", onClick: fontUp }, "A+")
+          )
+        ),
+        // Reverse mode
+        e("div", { className: "setting-row" },
+          e("div", null,
+            e("div", { className: "setting-label" }, "Reverse Quiz Mode"),
+            e("div", { className: "setting-sublabel" }, "Show English, pick Arabic")
+          ),
+          e("label", { className: "toggle" },
+            e("input", { type: "checkbox", checked: reverseMode, onChange: function() {
+              setReverseMode(function(v) { return !v; });
+              mcCache.current = {};
+            }}),
+            e("div", { className: "toggle-track" }),
+            e("div", { className: "toggle-thumb" })
+          )
+        ),
+        // Categories
+        e("div", { style: { padding: "16px 0 8px" } },
+          e("div", { className: "setting-label", style: { marginBottom: "4px" } }, "Category Filter"),
+          e("div", { className: "setting-sublabel", style: { marginBottom: "10px" } }, activeCats.length === 0 ? "All categories (tap to filter)" : activeCats.length + " selected"),
+          e("div", { className: "cat-pills" },
+            CAT_KEYS.map(function(k) {
+              return e("button", {
+                key: k, className: "cat-pill" + (activeCats.indexOf(k) !== -1 ? " active" : ""),
+                onClick: function() { toggleCat(k); }
+              }, CATEGORIES[k]);
+            })
+          )
+        ),
+        // Apply to deck
+        e("div", { style: { paddingTop: "12px", textAlign: "center" } },
+          e("button", { className: "nav-btn", style: { justifyContent: "center", margin: "0 auto" }, onClick: function() {
+            reshuffle(); mcRestart(); setModal(null);
+            setToast(activeCats.length === 0 ? "All categories \u2014 deck reshuffled" : "Filtered \u2014 deck reshuffled");
+          }}, "Apply & Reshuffle")
+        )
+      );
+    }
+
+    if (modal === "shortcuts") {
+      var shortcuts = appMode === "mc" ? [
+        ["1-4", "Select answer"],
+        ["\u2190 \u2192", "Previous / Next"],
+        ["M", "Mark for review"],
+        ["?", "Show shortcuts"],
+      ] : [
+        ["\u2190 \u2192", "Previous / Next"],
+        ["Space", "Flip card"],
+        ["M", "Mark for review"],
+        ["?", "Show shortcuts"],
+      ];
+      content = e("div", { className: "modal-content" },
+        e("button", { className: "modal-close", onClick: function() { setModal(null); } }, "\u2715"),
+        e("div", { className: "modal-title" }, "Keyboard Shortcuts"),
+        shortcuts.map(function(s, i) {
+          return e("div", { className: "shortcut-row", key: i },
+            e("span", { className: "shortcut-desc" }, s[1]),
+            e("span", { className: "shortcut-key" }, s[0])
+          );
+        })
+      );
+    }
+
+    if (modal === "mistakes") {
+      var wrongs = [];
+      Object.keys(mcAnswers).forEach(function(k) {
+        var idx = parseInt(k);
+        if (!mcAnswers[k].correct && mcDeck[idx]) {
+          wrongs.push({ idx: idx, phrase: mcDeck[idx] });
+        }
+      });
+      content = e("div", { className: "modal-content" },
+        e("button", { className: "modal-close", onClick: function() { setModal(null); } }, "\u2715"),
+        e("div", { className: "modal-title" }, "Review Mistakes (" + wrongs.length + ")"),
+        wrongs.length === 0
+          ? e("div", { style: { textAlign: "center", color: "rgba(212,168,84,0.4)", padding: "20px" } }, "No mistakes \u2014 perfect score!")
+          : wrongs.map(function(w) {
+              return e("div", { className: "mistake-item", key: w.idx, onClick: function() { mcJumpToMistake(w.idx); } },
+                e("div", { className: "mistake-ar" }, w.phrase.ar),
+                e("div", { className: "mistake-en" }, w.phrase.en)
+              );
+            })
+      );
+    }
+
+    return e("div", { className: "modal-overlay", onClick: function(ev) { if (ev.target.className.indexOf("modal-overlay") !== -1) setModal(null); } }, content);
+  };
+
+  // ═══════════════════════════════════
+  // PHRASE OF THE DAY
+  // ═══════════════════════════════════
+  if (appMode === "potd") {
+    var today = new Date();
+    var dateStr = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    return e("div", { className: "app" },
+      e("div", { style: { padding: "16px 20px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 } },
+        modeToggle, headerIcons
+      ),
+      e("div", { style: { flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px" } },
+        e("div", { className: "potd-date" }, dateStr),
+        e("div", { className: "potd-card" },
+          e("div", { className: "ornament ornament-top" }),
+          e("div", { className: "ornament-dot ornament-dot-top" }),
+          e("div", { className: "arabic-text", style: { marginBottom: "16px" } }, potd.ar),
+          e("div", { className: "translit-text" }, potd.tr),
+          e("div", { style: { marginTop: "20px" } }, e("div", { className: "english-text" }, potd.en)),
+          e("div", { className: "potd-meta" }, CATEGORIES[potd.cat]),
+          e("div", { className: "potd-ref" },
+            "Appears ", e("strong", { style: { color: "#D4A854" } }, potd.freq), " times in the Qur'an",
+            e("br"), e("span", { style: { fontSize: "12px" } }, potd.refs)
+          ),
+          e("div", { className: "ornament ornament-bottom" }),
+          e("div", { className: "ornament-dot ornament-dot-bottom" })
+        ),
+        // Mark + share
+        e("div", { style: { display: "flex", justifyContent: "center", gap: "12px", marginTop: "20px" } },
+          e("button", { className: "mark-btn" + (marked.has(potd.id) ? " active" : ""), onClick: function() {
+            setMarked(function(prev) { var n = new Set(prev); if (n.has(potd.id)) n.delete(potd.id); else n.add(potd.id); return n; });
+          }}, BookmarkI(marked.has(potd.id)), marked.has(potd.id) ? " Marked" : " Save")
+        )
+      ),
+      renderModal(),
+      toast ? e("div", { className: "toast", key: toast }, toast) : null
+    );
+  }
+
+  // ═══════════════════════════════════
+  // FLASHCARD MODE
+  // ═══════════════════════════════════
+  if (appMode === "flashcard") {
+    return e("div", { className: "app" },
+      // Header
+      e("div", { style: { padding: "16px 20px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 } },
+        !isReview ? modeToggle : e("button", { className: "header-btn", onClick: function() { setFcView("study"); } }, BackI(), " Back"),
+        e("div", { style: { display: "flex", gap: "6px", alignItems: "center" } },
+          !isReview ? [
+            e("button", { key: "sh", className: "header-btn", onClick: reshuffle }, ShuffleI(), " Reshuffle"),
+            e("button", { key: "rv", className: "header-btn", onClick: openReview },
+              ListI(), " Review", marked.size > 0 ? e("span", { className: "badge" }, marked.size) : null
+            ),
+          ] : [
+            marked.size > 0 ? e("button", { key: "cl", className: "header-btn", onClick: function() { setMarked(new Set()); setReviewDeck([]); setFcView("study"); }, style: { color: "rgba(212,168,84,0.5)" } }, "Clear All") : null,
+            e("span", { key: "ct", style: { fontSize: "12px", color: "rgba(212,168,84,0.45)", letterSpacing: "0.12em", textTransform: "uppercase" } }, "Review (" + marked.size + ")"),
+          ],
+          headerIcons
+        )
+      ),
+      // Progress
+      cDeck.length > 0 ? e("div", { style: { padding: "0 20px 8px" } },
+        e("div", { className: "progress-track" },
+          e("div", { className: "progress-fill", style: { width: ((cIdx + 1) / cDeck.length * 100) + "%" } })
+        ),
+        e("div", { style: { textAlign: "center", marginTop: "6px", fontSize: "12px", color: "rgba(212,168,84,0.35)", letterSpacing: "0.15em" } },
+          (cIdx + 1) + " / " + cDeck.length
+        )
+      ) : null,
+      // Main
+      e("div", { style: { flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "8px 20px 16px" }, onTouchStart: onTS, onTouchEnd: onTE },
+        isReview && reviewDeck.length === 0
+          ? e("div", { className: "empty-state" },
+              e("div", { style: { fontSize: "48px", marginBottom: "16px", opacity: 0.3 } }, "\u263D"),
+              e("div", { style: { fontSize: "18px", color: "rgba(245,237,224,0.5)", marginBottom: "8px" } }, "No phrases marked yet"),
+              e("div", { style: { fontSize: "14px", color: "rgba(212,168,84,0.35)" } }, "Tap the bookmark icon while studying")
+            )
+          : card ? renderCard(card, cFlip, function() { setCFlip(function(f) { return !f; }); }, fcView + "-" + cIdx) : null
+      ),
+      // Bottom
+      cDeck.length > 0 && card ? e("div", { style: { padding: "8px 20px 28px", flexShrink: 0 } },
+        e("div", { style: { display: "flex", justifyContent: "center", marginBottom: "14px" } },
+          e("button", { className: "mark-btn" + (marked.has(card.id) ? " active" : ""), onClick: toggleMark },
+            BookmarkI(marked.has(card.id)), marked.has(card.id) ? " Marked" : " Mark for Review"
+          )
+        ),
+        e("div", { style: { display: "flex", justifyContent: "center", gap: "12px" } },
+          e("button", { className: "nav-btn", onClick: goPrev, disabled: cIdx === 0 }, ChevL(), " Previous"),
+          e("button", { className: "nav-btn", onClick: goNext, disabled: cIdx === cDeck.length - 1 }, "Next ", ChevR())
+        )
+      ) : null,
+      renderModal(),
+      toast ? e("div", { className: "toast", key: toast }, toast) : null
+    );
+  }
+
+  // ═══════════════════════════════════
+  // QUIZ MODE (MC)
+  // ═══════════════════════════════════
   return e("div", { className: "app" },
     // Header
-    e("div", { className: "header" },
-      !isReview
-        ? e("button", { className: "reshuffle-btn", onClick: reshuffle, title: "Reshuffle deck" }, ReshuffleSvg())
-        : e("button", { className: "header-btn", onClick: closeReview }, "← Study"),
-      e("div", { className: "header-title" }, isReview ? "Marked for Review" : "Qurʾānic Phrases"),
-      !isReview
-        ? e("button", {
-            className: "header-btn" + (marked.size > 0 ? " active" : ""),
-            onClick: openReview
-          },
-          "Review",
-          marked.size > 0 ? e("span", { className: "badge" }, marked.size) : null
-        )
-        : e("button", {
-            className: "header-btn",
-            style: { color: "rgba(212,168,84,0.4)", fontSize: "11px" },
-            onClick: () => { setMarked(new Set()); setReviewDeck([]); }
-          }, "Clear All")
+    e("div", { style: { padding: "16px 20px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 } },
+      modeToggle,
+      e("div", { style: { display: "flex", gap: "6px", alignItems: "center" } },
+        !mcDone ? [
+          e("button", { key: "rv2", className: "header-btn", onClick: openReview },
+            ListI(), marked.size > 0 ? e("span", { className: "badge" }, marked.size) : null
+          ),
+          e("button", { key: "end", className: "header-btn", onClick: mcEndSession, style: { color: "rgba(229,115,115,0.7)" } }, StopI(), " End"),
+        ] : null,
+        headerIcons
+      )
     ),
-
+    // Scoreboard
+    !mcDone ? e("div", { className: "mc-scoreboard", style: { marginBottom: "6px" } },
+      e("div", { className: "mc-score-item correct" }, CheckI(), e("span", { className: "mc-score-num" }, mcCorrect)),
+      e("div", { className: "mc-score-item wrong" }, XI(), e("span", { className: "mc-score-num" }, mcWrong)),
+      e("div", { className: "mc-score-item review" }, BookmarkI(true), e("span", { className: "mc-score-num" }, marked.size)),
+      e("div", { className: "mc-score-item unanswered" }, e("span", { style: { fontSize: "13px" } }, "\u2013"), e("span", { className: "mc-score-num" }, mcUnanswered))
+    ) : null,
     // Progress
-    cDeck.length > 0
-      ? e("div", { className: "progress-wrap" },
-          e("div", { className: "progress-track" },
-            e("div", { className: "progress-fill", style: { width: ((cIdx + 1) / cDeck.length * 100) + "%" } })
-          ),
-          e("div", { className: "progress-label" }, (cIdx + 1) + " / " + cDeck.length)
-        )
-      : null,
-
-    // Main card area
-    e("div", { className: "card-area", onTouchStart: onTouchStart, onTouchEnd: onTouchEnd },
-      isReview && reviewDeck.length === 0
-        ? e("div", { className: "empty-state" },
-            e("div", { className: "empty-icon" }, "☽"),
-            e("div", { className: "empty-title" }, "No phrases marked yet"),
-            e("div", { className: "empty-sub" }, "Tap the bookmark icon while studying\nto add phrases here")
-          )
-        : card
-          ? e(Card, { card, flipped: cFlip, onFlip: () => setCFlip(f => !f), animKey: view + "-" + cIdx })
-          : null
-    ),
-
-    // Controls
-    cDeck.length > 0 && card
-      ? e("div", { className: "controls" },
-          e("div", { className: "mark-row" },
-            e("button", { className: "mark-btn" + (marked.has(card.id) ? " active" : ""), onClick: toggleMark },
-              BookmarkSvg(marked.has(card.id)),
-              marked.has(card.id) ? " Marked" : " Mark for Review"
+    !mcDone && mcDeck.length > 0 ? e("div", { style: { padding: "0 20px 8px" } },
+      e("div", { className: "progress-track" },
+        e("div", { className: "progress-fill", style: { width: ((mcIdx + 1) / mcDeck.length * 100) + "%" } })
+      ),
+      e("div", { style: { textAlign: "center", marginTop: "6px", fontSize: "12px", color: "rgba(212,168,84,0.35)", letterSpacing: "0.15em" } },
+        reverseMode ? "(Reverse) " : "", (mcIdx + 1) + " / " + mcDeck.length
+      )
+    ) : null,
+    // Main
+    e("div", { style: { flex: 1, display: "flex", flexDirection: "column", justifyContent: mcDone ? "center" : "flex-start", padding: mcDone ? "8px 20px 16px" : "8px 20px 0", overflowY: "auto" }, onTouchStart: onTS, onTouchEnd: onTE },
+      mcDone
+        // ─── Summary screen ───
+        ? e("div", { className: "mc-complete mc-reveal" },
+            e("div", { className: "mc-complete-icon" }, mcCorrect >= mcDeck.length * 0.8 ? "\u2728" : mcCorrect >= mcDeck.length * 0.5 ? "\u263D" : "\uD83D\uDCD6"),
+            e("div", { className: "mc-complete-title" }, "Session Complete"),
+            e("div", { className: "mc-complete-subtitle" }, (mcCorrect + mcWrong) + " of " + mcDeck.length + " answered"),
+            e("div", { className: "mc-final-stats" },
+              e("div", { className: "mc-final-stat correct" },
+                e("span", { className: "mc-final-stat-num" }, mcCorrect),
+                e("span", { className: "mc-final-stat-label" }, "Correct")
+              ),
+              e("div", { className: "mc-final-stat wrong" },
+                e("span", { className: "mc-final-stat-num" }, mcWrong),
+                e("span", { className: "mc-final-stat-label" }, "Incorrect")
+              ),
+              e("div", { className: "mc-final-stat review" },
+                e("span", { className: "mc-final-stat-num" }, marked.size),
+                e("span", { className: "mc-final-stat-label" }, "Marked")
+              )
+            ),
+            e("div", { style: { display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" } },
+              mcWrong > 0 ? e("button", { className: "nav-btn", onClick: function() { setModal("mistakes"); }, style: { justifyContent: "center", width: "240px", color: "#EF9A9A" } }, XI(), " Review Mistakes (" + mcWrong + ")") : null,
+              mcUnanswered > 0 ? e("button", { className: "nav-btn", onClick: mcGoUnanswered, style: { justifyContent: "center", width: "240px" } }, "Unanswered (" + mcUnanswered + ")") : null,
+              e("button", { className: "share-btn", onClick: shareResult, style: { width: "240px" } }, ShareI(), " Share Result"),
+              e("button", { className: "nav-btn", onClick: mcRestart, style: { justifyContent: "center", width: "240px" } }, ShuffleI(), " Try Again"),
+              e("button", { className: "nav-btn", onClick: function() { switchMode("flashcard"); }, style: { justifyContent: "center", width: "240px" } }, BackI(), " Flashcards")
             )
-          ),
-          e("div", { className: "nav-row" },
-            e("button", { className: "nav-btn", onClick: goPrev, disabled: cIdx === 0 }, ChevLeft(), " Previous"),
-            e("button", { className: "nav-btn", onClick: goNext, disabled: cIdx === cDeck.length - 1 }, "Next ", ChevRight())
           )
-        )
-      : null
+        // ─── Question ───
+        : mcCard ? e("div", { className: "mc-reveal", key: "mc-" + mcIdx, style: { display: "flex", flexDirection: "column", gap: "12px" } },
+            // Answered badge
+            mcAnswers[mcIdx] != null
+              ? e("div", { style: { textAlign: "center", marginBottom: "-4px" } },
+                  e("span", { style: { fontSize: "11px", letterSpacing: "0.15em", textTransform: "uppercase", color: mcAnswers[mcIdx].correct ? "rgba(76,175,80,0.6)" : "rgba(229,115,115,0.6)" } },
+                    mcAnswers[mcIdx].correct ? "\u2713 Answered correctly" : "\u2717 Answered incorrectly"
+                  )
+                )
+              : null,
+            // Question card
+            e("div", { className: "mc-question-card" },
+              e("div", { className: "ornament ornament-top" }),
+              e("div", { className: "ornament-dot ornament-dot-top" }),
+              reverseMode
+                ? [
+                    e("div", { key: "en", className: "english-text", style: { marginBottom: "16px" } }, mcCard.en),
+                    e("div", { key: "hint", style: { fontSize: "11px", color: "rgba(212,168,84,0.3)", textTransform: "uppercase", letterSpacing: "0.15em", textAlign: "center" } }, "Select the Arabic")
+                  ]
+                : [
+                    e("div", { key: "ar", className: "arabic-text", style: { marginBottom: "16px" } }, mcCard.ar),
+                    e("div", { key: "tr", className: "translit-text" }, mcCard.tr)
+                  ],
+              renderRefToggle(mcCard),
+              e("div", { className: "ornament ornament-bottom" }),
+              e("div", { className: "ornament-dot ornament-dot-bottom" })
+            ),
+            // Options
+            mcOptions.map(function(opt, i) {
+              var cls = "mc-option mc-reveal-" + (i + 1);
+              if (mcSelected !== null) {
+                cls += " mc-locked";
+                if (opt.correct) cls += " mc-correct";
+                else if (i === mcSelected && !opt.correct) cls += " mc-wrong";
+                else cls += " mc-dimmed";
+              }
+              return e("button", { className: cls, key: opt.id + "-" + i, onClick: function() { mcAnswer(i); } },
+                e("span", { className: "mc-letter" }, LETTERS[i]),
+                reverseMode
+                  ? e("span", { className: "arabic-text", style: { margin: 0, fontSize: "calc(clamp(16px, 4vw, 20px) * var(--font-scale))", lineHeight: 1.6 } }, opt.ar)
+                  : e("span", null, opt.en)
+              );
+            })
+          ) : null
+    ),
+    // Bottom nav (quiz)
+    !mcDone && mcCard ? e("div", { style: { padding: "8px 20px 28px", flexShrink: 0 } },
+      e("div", { style: { display: "flex", justifyContent: "center", gap: "8px", marginBottom: "14px", flexWrap: "wrap" } },
+        e("button", { className: "mark-btn" + (marked.has(mcCard.id) ? " active" : ""), onClick: toggleMark },
+          BookmarkI(marked.has(mcCard.id)), marked.has(mcCard.id) ? " Marked" : " Mark"
+        ),
+        mcUnanswered > 0 && mcUnanswered < mcDeck.length
+          ? e("button", { className: "mark-btn", onClick: mcGoUnanswered }, "Unanswered (" + mcUnanswered + ")")
+          : null
+      ),
+      e("div", { style: { display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap" } },
+        e("button", { className: "nav-btn", onClick: mcGoPrev, disabled: mcIdx === 0 }, ChevL(), " Prev"),
+        mcIdx < mcDeck.length - 1
+          ? e("button", { className: "nav-btn", onClick: mcGoNext }, "Next ", ChevR())
+          : null,
+        mcUnanswered === 0 || mcIdx === mcDeck.length - 1
+          ? e("button", { className: "nav-btn mc-finish-btn", onClick: mcEndSession }, "Finish ", CheckI())
+          : null
+      )
+    ) : null,
+    renderModal(),
+    toast ? e("div", { className: "toast", key: toast }, toast) : null
   );
 }
 
 ReactDOM.render(e(App), document.getElementById("root"));
+
 </script>
 </body>
 </html>
