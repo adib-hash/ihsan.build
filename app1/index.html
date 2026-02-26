@@ -877,8 +877,8 @@ function App() {
     var today = new Date();
     var dateStr = today.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     return e("div", { className: "app" },
-      e("div", { style: { padding: "16px 20px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 } },
-        modeToggle, headerIcons
+      e("div", { style: { padding: "12px 12px 10px", display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center", flexShrink: 0 } },
+        modeToggle, e("div", { style: { marginLeft: "auto" } }, headerIcons)
       ),
       e("div", { style: { flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px" } },
         e("div", { className: "potd-date" }, dateStr),
@@ -914,17 +914,17 @@ function App() {
   if (appMode === "flashcard") {
     return e("div", { className: "app" },
       // Header
-      e("div", { style: { padding: "16px 20px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 } },
+      e("div", { style: { padding: "12px 12px 10px", display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center", flexShrink: 0 } },
         !isReview ? modeToggle : e("button", { className: "header-btn", onClick: function() { setFcView("study"); } }, BackI(), " Back"),
-        e("div", { style: { display: "flex", gap: "6px", alignItems: "center" } },
+        e("div", { style: { display: "flex", gap: "6px", alignItems: "center", marginLeft: "auto" } },
           !isReview ? [
-            e("button", { key: "sh", className: "header-btn", onClick: reshuffle }, ShuffleI(), " Reshuffle"),
-            e("button", { key: "rv", className: "header-btn", onClick: openReview },
-              ListI(), " Review", marked.size > 0 ? e("span", { className: "badge" }, marked.size) : null
+            e("button", { key: "sh", className: "icon-btn", onClick: reshuffle, title: "Reshuffle" }, ShuffleI()),
+            e("button", { key: "rv", className: "icon-btn", onClick: openReview, title: "Review marked", style: { position: "relative" } },
+              ListI(), marked.size > 0 ? e("span", { className: "badge", style: { position: "absolute", top: "-4px", right: "-4px", fontSize: "9px", padding: "1px 4px", minWidth: "16px" } }, marked.size) : null
             ),
           ] : [
-            marked.size > 0 ? e("button", { key: "cl", className: "header-btn", onClick: function() { setMarked(new Set()); setReviewDeck([]); setFcView("study"); }, style: { color: "rgba(212,168,84,0.5)" } }, "Clear All") : null,
-            e("span", { key: "ct", style: { fontSize: "12px", color: "rgba(212,168,84,0.45)", letterSpacing: "0.12em", textTransform: "uppercase" } }, "Review (" + marked.size + ")"),
+            marked.size > 0 ? e("button", { key: "cl", className: "header-btn", onClick: function() { setMarked(new Set()); setReviewDeck([]); setFcView("study"); }, style: { color: "rgba(212,168,84,0.5)" } }, "Clear") : null,
+            e("span", { key: "ct", style: { fontSize: "11px", color: "rgba(212,168,84,0.45)", letterSpacing: "0.1em", textTransform: "uppercase" } }, "Review (" + marked.size + ")"),
           ],
           headerIcons
         )
@@ -970,14 +970,14 @@ function App() {
   // ═══════════════════════════════════
   return e("div", { className: "app" },
     // Header
-    e("div", { style: { padding: "16px 20px 12px", display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 } },
+    e("div", { style: { padding: "12px 12px 10px", display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center", flexShrink: 0 } },
       modeToggle,
-      e("div", { style: { display: "flex", gap: "6px", alignItems: "center" } },
+      e("div", { style: { display: "flex", gap: "6px", alignItems: "center", marginLeft: "auto" } },
         !mcDone ? [
-          e("button", { key: "rv2", className: "header-btn", onClick: openReview },
-            ListI(), marked.size > 0 ? e("span", { className: "badge" }, marked.size) : null
+          e("button", { key: "rv2", className: "icon-btn", onClick: openReview, title: "Review marked", style: { position: "relative" } },
+            ListI(), marked.size > 0 ? e("span", { className: "badge", style: { position: "absolute", top: "-4px", right: "-4px", fontSize: "9px", padding: "1px 4px", minWidth: "16px" } }, marked.size) : null
           ),
-          e("button", { key: "end", className: "header-btn", onClick: mcEndSession, style: { color: "rgba(229,115,115,0.7)" } }, StopI(), " End"),
+          e("button", { key: "end", className: "icon-btn", onClick: mcEndSession, title: "End session", style: { color: "rgba(229,115,115,0.7)", borderColor: "rgba(229,115,115,0.2)" } }, StopI()),
         ] : null,
         headerIcons
       )
